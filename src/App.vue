@@ -1,8 +1,10 @@
 <template>
   <el-container id="app">
-    <el-aside width="150px">
-      <SideBar></SideBar>
-    </el-aside>
+    <el-scrollbar>
+      <el-aside width="150px">
+        <SideBar></SideBar>
+      </el-aside>
+    </el-scrollbar>
     <el-main>
       <router-view class="contain"></router-view>
     </el-main>
@@ -44,5 +46,9 @@ export default {
 .contain {
   display: flex;
   flex: 1;
+}
+.el-scrollbar__wrap {
+  overflow-x: hidden;
+  background-color: rgb(218, 185, 106);
 }
 </style>
