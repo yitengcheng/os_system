@@ -1,21 +1,29 @@
 <template>
   <el-container id="app">
-    <el-scrollbar>
+    <el-scrollbar class="asideScroll">
       <el-aside width="150px">
-        <SideBar></SideBar>
+        <SideBar />
       </el-aside>
     </el-scrollbar>
-    <el-main>
-      <router-view class="contain"></router-view>
-    </el-main>
+    <el-container>
+      <el-header class="elHeader">
+        <Header />
+      </el-header>
+      <el-scrollbar style="height:100%">
+        <el-main class="main">
+          <router-view class="mainContain"></router-view>
+        </el-main>
+      </el-scrollbar>
+    </el-container>
   </el-container>
 </template>
 
 <script>
 import SideBar from './components/SideBar';
+import Header from './components/Header';
 export default {
     name: 'App',
-    components: { SideBar },
+    components: { Header, SideBar },
     created () {
         this.$router.replace('/');
         // 在页面加载时读取sessionStorage里的状态信息
@@ -36,19 +44,27 @@ export default {
     }
 };
 </script>
-<style>
+<style lang="scss">
+@import "./assets/scss/baseColor.scss";
 #app {
   display: flex;
   flex: 1;
   flex-direction: row;
   height: 100%;
 }
-.contain {
-  display: flex;
-  flex: 1;
+.main {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.asideScroll {
+  background-color: $color-background;
 }
 .el-scrollbar__wrap {
   overflow-x: hidden;
-  background-color: rgb(218, 185, 106);
+}
+.elHeader {
+  background-color: $color-background-d;
+  display: flex;
 }
 </style>

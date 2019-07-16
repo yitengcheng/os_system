@@ -3,7 +3,7 @@
 import Vue from 'vue';
 import App from './App';
 import router from './router';
-import './assets/css/base.css';
+import './assets/scss/base.scss';
 import VueLazyLoad from 'vue-lazyload';
 import infiniteScroll from 'vue-infinite-scroll';
 import axios from 'axios';
@@ -14,12 +14,14 @@ import './../theme/index.css';
 import { currency } from './utils/currency';
 import * as utils from './utils/validation';
 import moment from 'moment';
+import Icon from 'vue2-svg-icon/Icon.vue';
 
 Vue.config.productionTip = false;
 Vue.use(VueLazyLoad, {
     loading: '/static/loading-svg/loading-balls.svg'
 });
 Vue.use(infiniteScroll);
+Vue.component('icon', Icon);
 axios.interceptors.response.use(
     response => {
         console.log('success', { data: response.data, status: response.status });
