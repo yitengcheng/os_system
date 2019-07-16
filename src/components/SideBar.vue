@@ -2,8 +2,8 @@
   <el-menu
     :default-active="activeIndex"
     class="aside"
-    background-color="#DAB96A"
-    text-color="#221815"
+    background-color="#003592"
+    text-color="#fff"
     active-text-color="#595757"
     :router="true"
   >
