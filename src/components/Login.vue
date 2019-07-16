@@ -148,6 +148,7 @@ export default {
   align-items: center;
   font-size: 14px;
   line-height: 20px;
+  color: #fff;
 }
 .user {
   display: flex;
