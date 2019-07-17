@@ -3,7 +3,7 @@
     <el-date-picker
       class="picker"
       v-model="input"
-      type="datetime"
+      :type="type || 'datetime'"
       :align="align || 'right'"
       :size="size"
       @change="onChange"
@@ -15,7 +15,16 @@
 
 <script>
 export default {
-    props: ['form', 'options', 'label', 'value', 'align', 'size', 'clearable'],
+    props: [
+        'form',
+        'options',
+        'label',
+        'value',
+        'align',
+        'size',
+        'clearable',
+        'type'
+    ],
     data () {
         return {
             input: '',
