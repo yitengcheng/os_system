@@ -15,6 +15,9 @@ import { currency } from './utils/currency';
 import * as utils from './utils/validation';
 import moment from 'moment';
 import Icon from 'vue2-svg-icon/Icon.vue';
+import ECharts from 'vue-echarts/components/ECharts.vue';
+import 'echarts';
+import 'echarts-wordcloud';
 
 Vue.config.productionTip = false;
 Vue.use(VueLazyLoad, {
@@ -22,6 +25,7 @@ Vue.use(VueLazyLoad, {
 });
 Vue.use(infiniteScroll);
 Vue.component('icon', Icon);
+Vue.component('v-chart', ECharts);
 axios.interceptors.response.use(
     response => {
         console.log('success', { data: response.data, status: response.status });

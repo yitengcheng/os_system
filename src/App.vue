@@ -1,10 +1,11 @@
 <template>
   <el-container id="app">
-    <el-scrollbar class="asideScroll">
-      <el-aside width="150px">
+    <el-aside width="151px" class="sidebar-container">
+      <el-scrollbar style="height:100%">
         <SideBar />
-      </el-aside>
-    </el-scrollbar>
+      </el-scrollbar>
+    </el-aside>
+
     <el-container>
       <el-header class="elHeader">
         <Header />
@@ -57,14 +58,15 @@ export default {
   padding: 0;
   overflow: hidden;
 }
-.asideScroll {
-  background-color: $color-background;
-}
 .el-scrollbar__wrap {
   overflow-x: hidden;
 }
 .elHeader {
   background-color: $color-background-d;
   display: flex;
+}
+.sidebar-container {
+  overflow: hidden;
+  background-color: $color-background;
 }
 </style>

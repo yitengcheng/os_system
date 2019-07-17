@@ -4,7 +4,7 @@
     class="aside"
     background-color="#003592"
     text-color="#fff"
-    active-text-color="#595757"
+    active-text-color="#fff"
     :router="true"
   >
     <Login class="login"></Login>
@@ -48,6 +48,12 @@ export default {
         return {
             activeIndex: '/',
             menuList: [
+                {
+                    path: '/',
+                    title: '首页',
+                    showFlag: true,
+                    hasJudge: false
+                },
                 {
                     path: '/audit',
                     title: '审批管理',
@@ -212,7 +218,7 @@ export default {
 <style lang='scss' scoped>
 .aside {
   display: flex;
-  flex: 1;
+  width: 150px;
   flex-direction: column;
   border-right: 1px solid #545c64;
   overflow: hidden;
