@@ -79,7 +79,7 @@ export default {
                     hasJudge: false,
                     childern: [
                         {
-                            path: '/publicAddressList',
+                            path: '/publicAddressBook',
                             title: '公共通讯录',
                             showFlag: true,
                             hasJudge: false
