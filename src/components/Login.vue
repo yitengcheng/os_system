@@ -24,9 +24,8 @@
       title="登录"
       :dialogVisible="modelVisible"
       @close="closeModel"
-      @doCancel="doRegister"
+      @doCancel="closeModel"
       @doConfirm="doConfirm"
-      cancel="注册"
     >
       <div slot="content">
         <el-form :model="userInfo" ref="login" class="loginWrapper" :rules="rules">
@@ -97,12 +96,6 @@ export default {
             this.logoutVisible = false;
             this.modifyVisible = false;
             this.$refs.login.resetFields();
-        },
-        doRegister () {
-            this.closeModel();
-            this.$router.push({
-                name: 'Register'
-            });
         },
         onChangeName () {
             this.name = this.userInfo.name;

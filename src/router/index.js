@@ -1,6 +1,9 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Main from './../views/Main';
+// 系统管理
+import Personnel from './../views/personnel.vue';
+import AddPersonnel from './../views/addPersonnel.vue';
 // 公共资源
 import PublicAddressBook from './../views/publicAddressBook';
 
@@ -17,6 +20,16 @@ export default new Router({
             path: '/publicAddressBook',
             name: 'publicAddressBook',
             component: PublicAddressBook
+        },
+        {
+            path: '/personnel',
+            name: 'personnel',
+            component: Personnel
+        },
+        {
+            path: '/addPersonnel',
+            name: 'addPersonnel',
+            component: AddPersonnel
         }
     ]
 });
