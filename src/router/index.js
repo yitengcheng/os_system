@@ -7,6 +7,7 @@ import AddPersonnel from './../views/addPersonnel.vue';
 // 公共资源
 import PublicAddressBook from './../views/publicAddressBook';
 import MessageBoard from './../views/messageBoard';
+import DataCenter from './../views/dataCenter';
 
 Vue.use(Router);
 
@@ -36,6 +37,11 @@ export default new Router({
             path: '/messageBoard',
             name: 'messageBoard',
             component: MessageBoard
+        },
+        {
+            path: '/dataCenter',
+            name: 'dataCenter',
+            component: DataCenter
         }
     ]
 });
