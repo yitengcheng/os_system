@@ -34,21 +34,21 @@ export default {
                 {
                     prop: 'branch',
                     label: '部门',
-                    width: '150'
+                    width: '200'
                 },
                 {
                     prop: 'position',
                     label: '职位',
-                    width: '150'
+                    width: '200'
                 },
                 {
                     prop: 'name',
                     label: '姓名',
-                    width: '150'
+                    width: '200'
                 },
                 {
                     label: '操作',
-                    width: '200'
+                    width: '300'
                 }
             ]
         };
@@ -80,6 +80,5 @@ export default {
   display: flex;
   flex-direction: column;
   align-self: center;
-  width: 650px;
 }
 </style>
