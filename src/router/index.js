@@ -6,6 +6,7 @@ import Personnel from './../views/personnel.vue';
 import AddPersonnel from './../views/addPersonnel.vue';
 // 公共资源
 import PublicAddressBook from './../views/publicAddressBook';
+import MessageBoard from './../views/messageBoard';
 
 Vue.use(Router);
 
@@ -30,6 +31,11 @@ export default new Router({
             path: '/addPersonnel',
             name: 'addPersonnel',
             component: AddPersonnel
+        },
+        {
+            path: '/messageBoard',
+            name: 'messageBoard',
+            component: MessageBoard
         }
     ]
 });
