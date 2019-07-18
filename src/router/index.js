@@ -8,6 +8,7 @@ import AddPersonnel from './../views/addPersonnel.vue';
 import PublicAddressBook from './../views/publicAddressBook';
 import MessageBoard from './../views/messageBoard';
 import DataCenter from './../views/dataCenter';
+import DataDetail from './../views/dataDetail';
 
 Vue.use(Router);
 
@@ -42,6 +43,11 @@ export default new Router({
             path: '/dataCenter',
             name: 'dataCenter',
             component: DataCenter
+        },
+        {
+            path: '/dataDetail',
+            name: 'dataDetail',
+            component: DataDetail
         }
     ]
 });
