@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import WordCloud from '../components/wordCloud';
+import WordCloud from '../components/WordCloud';
 export default {
     components: { WordCloud },
     data () {
