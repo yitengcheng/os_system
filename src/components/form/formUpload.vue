@@ -1,14 +1,15 @@
 <template>
   <el-form-item :label="label" :prop="value">
     <el-upload
-      list-type="picture-card"
+      :list-type="listType || 'picture-card'"
       ref="upload"
       action="/api/upload"
       :http-request="upload"
       :file-list="fileList"
       multiple
     >
-      <i class="el-icon-plus"></i>
+      <i v-if="listType !== 'text'" class="el-icon-plus"></i>
+      <el-button v-else size="small" type="primary">点击上传</el-button>
     </el-upload>
   </el-form-item>
 </template>
@@ -16,7 +17,7 @@
 <script>
 export default {
     name: 'upload',
-    props: ['img', 'value', 'label'],
+    props: ['img', 'value', 'label', 'listType'],
     data () {
         return {
             imageUrl: '',
