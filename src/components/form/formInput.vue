@@ -7,7 +7,10 @@
       @change="onChange"
       :placeholder="place"
       :show-password="showPassword"
+      :show-word-limit="showWordLimit"
       :maxlength="maxlength"
+      :resize="resize"
+      :autosize="autosize"
     >
       <template v-if="append" slot="append">{{append}}</template>
     </el-input>
@@ -22,10 +25,13 @@ export default {
         'value',
         'placeholder',
         'showPassword',
+        'showWordLimit',
         'type',
         'rows',
         'maxlength',
-        'append'
+        'append',
+        'resize',
+        'autosize'
     ],
     watch: {
         input: {
