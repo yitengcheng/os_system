@@ -122,7 +122,7 @@ export default {
                             hasJudge: false
                         },
                         {
-                            path: '/officeSupplies ',
+                            path: '/officeSupplies',
                             title: '办公用品管理',
                             showFlag: true,
                             hasJudge: false
