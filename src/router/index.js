@@ -10,6 +10,9 @@ import MessageBoard from './../views/messageBoard';
 import DataCenter from './../views/dataCenter';
 import DataDetail from './../views/dataDetail';
 
+// 企业办公
+import FileRelease from './../views/fileRelease';
+
 Vue.use(Router);
 
 export default new Router({
@@ -48,6 +51,11 @@ export default new Router({
             path: '/dataDetail',
             name: 'dataDetail',
             component: DataDetail
+        },
+        {
+            path: '/fileRelease',
+            name: 'fileRelease',
+            component: FileRelease
         }
     ]
 });
