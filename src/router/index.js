@@ -12,6 +12,7 @@ import DataDetail from './../views/dataDetail';
 
 // 企业办公
 import FileRelease from './../views/fileRelease';
+import InformationIssue from './../views/informationIssue';
 
 Vue.use(Router);
 
@@ -56,6 +57,11 @@ export default new Router({
             path: '/fileRelease',
             name: 'fileRelease',
             component: FileRelease
+        },
+        {
+            path: '/informationIssue',
+            name: 'informationIssue',
+            component: InformationIssue
         }
     ]
 });
