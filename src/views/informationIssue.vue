@@ -33,7 +33,11 @@ export default {
         };
     },
     computed: {},
-    methods: {}
+    methods: {
+        onChange (value, formType) {
+            this.form[formType] = value;
+        }
+    }
 };
 </script>
 <style lang='scss' scoped>
