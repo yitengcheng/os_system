@@ -13,28 +13,21 @@ import PageTitle from '../components/PageTitle';
 
 export default {
     components: { ElTable, PageTitle },
+    mounted () {
+        this.$http
+            .post('/api/getPublicAddressBook', { pageNo: 0, pageSize: 10 })
+            .then(res => {
+                let { success, msg, addressBook } = res;
+                if (success) {
+                    this.tableData = addressBook;
+                } else {
+                    this.$alert(msg);
+                }
+            });
+    },
     data () {
         return {
-            tableData: [
-                {
-                    department: '行政部',
-                    position: '人事负责人',
-                    name: '洪智鑫',
-                    phone: '139xxxxxx'
-                },
-                {
-                    department: '行政部',
-                    position: '人事负责人',
-                    name: '洪智鑫',
-                    phone: '139xxxxxx'
-                },
-                {
-                    department: '行政部',
-                    position: '人事负责人',
-                    name: '洪智鑫',
-                    phone: '139xxxxxx'
-                }
-            ],
+            tableData: [],
             tableKey: [
                 { prop: 'department', label: '部门', width: '300' },
                 { prop: 'position', label: '职位', width: '300' },
