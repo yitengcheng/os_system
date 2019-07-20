@@ -107,7 +107,7 @@ export default {
             this.closeModel();
             this.$http
                 .post('/api/login', {
-                    name: this.name,
+                    userName: this.name,
                     password: this.password
                 })
                 .then(res => {
