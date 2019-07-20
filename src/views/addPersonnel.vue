@@ -53,7 +53,7 @@ export default {
                 email: '',
                 userName: '',
                 password: '',
-                sex: '',
+                sex: 0,
                 birthday: ''
             },
             rules: [],
