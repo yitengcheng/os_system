@@ -5,7 +5,7 @@
       <div>
         <el-button type="primary" class="addBtn" @click="addPerson">添加人员</el-button>
       </div>
-      <ElTable :stripe="true" :border="true" :tableKey="labels">
+      <ElTable :stripe="true" :border="true" :tableKey="labels" :tableData="tableData">
         <div slot-scope="data">
           <el-button
             @click.native.prevent="editorRow(data.data.$index, data.data.row)"
@@ -50,10 +50,27 @@ export default {
                     label: '操作',
                     width: '300'
                 }
-            ]
+            ],
+            tableData: []
         };
     },
     computed: {},
+    mounted () {
+        this.$http.post('/api/getPersons').then(res => {
+            let { success, msg, persons } = res;
+            if (success) {
+                persons.forEach(person => {
+                    this.tableData.push({
+                        name: person.name,
+                        branch: person.branch.name,
+                        position: person.position.position
+                    });
+                });
+            } else {
+                this.$alert(msg);
+            }
+        });
+    },
     methods: {
         editorRow () {},
         deleteRow () {},
