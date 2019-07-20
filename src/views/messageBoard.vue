@@ -33,7 +33,7 @@ export default {
     data () {
         return {
             input: '',
-            dmArr: [{ text: '123', x: 1500, y: 123, speed: 1, color: '#ffffff' }], // 弹幕列表
+            dmArr: [{ text: '123', x: 1500, y: 123, speed: 5, color: '#ffffff' }], // 弹幕列表
             gap: 5,
             timer: null,
             timer1: null,
@@ -45,15 +45,20 @@ export default {
     },
     mounted () {
         this.width = window.innerWidth;
-        this.timer1 = setInterval(() => {
-            if (this.temp) {
-                this.start();
-            }
-        }, 1000);
+        this.start();
     },
     destroyed () {
-        console.log('12312123', this);
         this.temp = false;
+    },
+    watch: {
+        temp: {
+            handler (newvalue, oldvalue) {
+                console.log(newvalue, oldvalue);
+                if (newvalue) {
+                    this.start();
+                }
+            }
+        }
     },
     methods: {
         pushDm (text, color) {
@@ -73,7 +78,7 @@ export default {
                 text: text,
                 x: x + delayWidth,
                 y: y,
-                speed: 1,
+                speed: 5,
                 color: color || this.getColor()
             });
         },
@@ -91,12 +96,20 @@ export default {
                     ctx.clearRect(0, 0, 1800, 400);
                     ctx.save();
                     ctx.font = '30px Microsoft YaHei';
-                    for (let i = 0, len = this.dmArr.length; i < len; i++) {
+                    for (let i = 0; i < this.dmArr.length; i++) {
+                        this.temp = false;
                         let dm = this.dmArr[i];
                         let overRange = -ctx.measureText(dm.text).width * 2;
                         dm.x -= dm.speed;
                         ctx.fillStyle = `#${dm.color}`;
                         ctx.fillText(dm.text, dm.x, dm.y);
+                        if (this.dmArr[this.dmArr.length - 1].x === 0) {
+                            for (let j = 0; j < this.dmArr.length; j++) {
+                                this.dmArr[j].x = 1500 + j * 50;
+                            }
+                            this.temp = true;
+                            clearInterval(this.timer);
+                        }
                     }
                     ctx.restore();
                 }, 20);
@@ -104,13 +117,10 @@ export default {
         },
         stop () {
             let ctx = this.$refs.canvas.getContext('2d');
-            clearInterval(this.timer);
-            clearInterval(this.timer1);
             ctx.clearRect(0, 0, 1500, 400);
         },
         sent () {
             this.pushDm(this.dmInput, this.color);
-            this.start();
             this.dmInput = '';
         }
     }
