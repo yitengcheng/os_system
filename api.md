@@ -291,3 +291,39 @@
     返回：res.json({
             success: true
         })
+
+# 车辆管理
+1. addCar(post) 添加车辆
+    参数: car{
+        carOwner：车主id,
+        carModel,
+        plate,
+    }
+    返回：res.json({
+            success: true
+        })
+
+2. getCars(post) 获取车辆
+    参数: 无
+    返回：res.json({
+            success: true,
+            carList:[
+                {
+                    carOwner: String,
+                    plate: String,
+                    carId: String
+                }
+            ]
+        })
+
+3. addCarRecord(post) 添加车辆预约
+    参数: carId, application, serviceTime
+    返回：res.json({
+            success: true
+        })
+
+4. confirmMileage(post) 确认车辆里程数
+    参数: recordId, startingKm, endingKm
+    返回：res.json({
+            success: true
+        })
