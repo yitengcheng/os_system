@@ -105,13 +105,13 @@ export default {
                 { label: '操作', width: '220' }
             ],
             outTableKey: [
-                { prop: 'date', label: '时间', width: '200' },
-                { prop: 'department', label: '部门', width: '200' },
-                { prop: 'receiver', label: '领取人', width: '200' },
-                { prop: 'name', label: '名称', width: '200' },
-                { prop: 'category', label: '类别', width: '200' },
-                { prop: 'number', label: '数量', width: '200' },
-                { prop: 'remark', label: '备注', width: '200' }
+                { prop: 'date', label: '时间', width: '150' },
+                { prop: 'department', label: '部门', width: '150' },
+                { prop: 'receiver', label: '领取人', width: '150' },
+                { prop: 'name', label: '名称', width: '150' },
+                { prop: 'category', label: '类别', width: '150' },
+                { prop: 'number', label: '数量', width: '150' },
+                { prop: 'remark', label: '备注', width: '150' }
             ]
         };
     },
