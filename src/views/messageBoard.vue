@@ -27,13 +27,13 @@
 
 <script>
 import PageTitle from '../components/PageTitle';
+import { mapState } from 'vuex';
 
 export default {
     components: { PageTitle },
     data () {
         return {
-            input: '',
-            dmArr: [{ text: '123', x: 1500, y: 123, speed: 5, color: '#ffffff' }], // 弹幕列表
+            dmArr: [], // 弹幕列表
             gap: 5,
             timer: null,
             timer1: null,
@@ -43,9 +43,21 @@ export default {
             temp: true
         };
     },
+    computed: {
+        ...mapState({
+            user: state => state.user.user
+        })
+    },
     mounted () {
-        this.width = window.innerWidth;
-        this.start();
+        this.$http.post('/api/getMessage').then(res => {
+            let { success, msg, messageList } = res;
+            if (success) {
+                for (let i = 0; i < messageList.length; i++) {
+                    this.pushDm(messageList[i]);
+                }
+            }
+            this.start();
+        });
     },
     destroyed () {
         this.temp = false;
@@ -78,7 +90,7 @@ export default {
                 text: text,
                 x: x + delayWidth,
                 y: y,
-                speed: 5,
+                speed: 2,
                 color: color || this.getColor()
             });
         },
@@ -87,7 +99,7 @@ export default {
             return Math.floor(Math.random() * range + 1) * this.gap;
         },
         getColor () {
-            return `${Math.floor(Math.random() * 16777215).toString(16)}`;
+            return `${Math.floor(Math.random() * 25000000).toString(16)}`;
         },
         start () {
             if (this.$refs.canvas) {
@@ -112,7 +124,7 @@ export default {
                         }
                     }
                     ctx.restore();
-                }, 20);
+                }, 10);
             }
         },
         stop () {
@@ -121,6 +133,22 @@ export default {
         },
         sent () {
             this.pushDm(this.dmInput, this.color);
+            this.$http
+                .post('/api/addMessage', {
+                    userId: this.user._id,
+                    message: this.dmInput
+                })
+                .then(res => {
+                    let { success, msg } = res;
+                    this.dmArr.push({
+                        text: this.dmInput,
+                        x: 1500,
+                        y: 123,
+                        speed: 3,
+                        color: '#ffffff'
+                    });
+                });
+
             this.dmInput = '';
         }
     }
@@ -151,7 +179,9 @@ export default {
   top: 30px;
   position: absolute;
   z-index: 1000;
-  background-color: #666666;
+  background-color: #ffffff;
+  border: 1px solid #000000;
+
   opacity: 0.8;
 }
 .input-area {
