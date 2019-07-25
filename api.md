@@ -327,3 +327,74 @@
     返回：res.json({
             success: true
         })
+
+# 文件交换
+1. sendToUser(post) 发送文件给同事
+    参数: filePath, toUserId, userId, title, desc
+    返回：res.json({
+            success: true
+        })
+
+2. getFileExchanges(post) 获取别人发送给你的文件列表
+    参数: userId
+    返回：res.json({
+            success: true,
+            FileExchangeList: [
+                {
+                    title: String,
+                    desc: String,
+                    initiator: String,
+                    filePath: Array
+                }
+            ]
+        })
+
+# 日程安排
+1. addSchedule(post) 添加日程
+    参数: userId, date, time, desc
+    返回：res.json({
+            success: true
+        })
+
+2. getSchedule(post) 获取日程安排
+    参数: userId
+    返回：res.json({
+            success: true,
+            scheduleList:[
+                {
+                    date:String,
+                    planList:[{time:String,desc:String}]
+                }
+            ]
+        })
+
+# 个人通讯录
+1. addAddressBook(post) 添加通讯录信息
+    参数: userId, name, phone, company
+    返回：res.json({
+            success: true
+        })
+
+2. getAddressBook(post) 获取个人通讯录
+    参数: userId
+    返回：res.json({
+            success: true,
+            addressBookList:[{
+                name: String,
+                phone: String,
+                company: String,
+                createTime: String
+            }]
+        })
+
+3. removeAddressBook(post) 删除通讯录
+    参数: userId, addressBookId
+    返回：res.json({
+            success: true
+        })
+
+4. updateAddressBook(post) 修改通讯录
+    参数: userId, addressBookId, name, phone, company
+    返回：res.json({
+            success: true
+        })
