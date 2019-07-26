@@ -398,3 +398,34 @@
     返回：res.json({
             success: true
         })
+
+# 密码管理
+1. addPassword(post) 添加密码信息
+    参数: desc, accountNumber, accountPassword, userId
+    返回：res.json({
+            success: true
+        })
+
+2. removePassword(post) 删除密码信息
+    参数: userId, passwordId
+    返回：res.json({
+            success: true
+        })
+
+3. updatePassword(post) 修改密码信息
+    参数: userId, passwordId
+    返回：res.json({
+            success: true
+        })
+
+4. getPassword(post) 获取密码列表
+    参数: userId
+    返回：res.json({
+            success: true,
+            passwordList: [{
+                desc: String,
+                accountNumber: String,
+                accountPassword: String,
+                createTime: String
+            }]
+        })
