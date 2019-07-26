@@ -1,6 +1,6 @@
 <template>
   <el-dialog :title="title || '提示'" :visible="dialogVisible" @close="closeModel">
-    <div>
+    <div class="contentContain">
       <slot name="content"></slot>
     </div>
     <div slot="footer" class="dialog-footer">
@@ -35,5 +35,10 @@ export default {
 }
 .btn {
   width: 100px;
+}
+.contentContain {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
