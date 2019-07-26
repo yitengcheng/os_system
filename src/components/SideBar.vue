@@ -172,12 +172,6 @@ export default {
                             hasJudge: false
                         },
                         {
-                            path: '/workFor',
-                            title: '工作记事',
-                            showFlag: true,
-                            hasJudge: false
-                        },
-                        {
                             path: '/passwordManagement',
                             title: '密码管理',
                             showFlag: true,
