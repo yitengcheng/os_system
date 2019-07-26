@@ -99,7 +99,6 @@ export default {
             tableData: [],
             adjustFlag: false,
             targetUser: {},
-            targetIndex: '',
             adjust: {
                 branchId: '',
                 positionId: ''
@@ -167,7 +166,6 @@ export default {
         },
         showAdjust (index, user) {
             this.targetUser = user;
-            this.targetIndex = index;
             this.adjustFlag = true;
         },
         adjustPosition () {
@@ -190,7 +188,7 @@ export default {
                         });
                 } else {
                     this.closeModel();
-                    this.$refs.adjust.resetFields();
+                    this.$refs.adjust && this.$refs.adjust.resetFields();
                     this.$alert('请注意核对信息');
                 }
             });
