@@ -64,8 +64,8 @@
             success: true
         })
 
-2. deletePerson(post) 删除人员
-    参数：id
+2. applyForLeave(post) 申请离职
+    参数：targetId
     返回：res.json({
              success: true
         })
@@ -111,41 +111,16 @@
             ]
         })
 
-5. updatePerson(post) 修改人员信息
-    参数：user{
-            name,
-            branch,
-            position,
-            userName,
-            password,
-            birthday,
-            sex,
-            phone,
-            email
-        }
+5. postAdjustment(post) 调整人员岗位
+    参数：targetId, branchId, positionId
     返回：res.json({
-            success: true,
-            persons: [
-                {
-                    "name": String,
-                    "branch": {
-                        "name": String,
-                        "_id":ObjectId
-                    },
-                    "position": {
-                        "position": String,
-                        "_id":ObjectId
-                    },
-                    "userName": String,
-                    "createTime": String,
-                    "birthday": String,
-                    "sex": String,
-                    "phone": String,
-                    "email": String,
-                    "head": String,
-                    "permissions": Array
-                }
-            ]
+            success: true
+        })
+
+6. confirmLeave(post) 确认离职
+    参数：targetId
+    返回：res.json({
+            success: true
         })
 
 # 公司发文
