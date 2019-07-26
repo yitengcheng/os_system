@@ -15,6 +15,7 @@ import FileRelease from './../views/fileRelease';
 import InformationIssue from './../views/informationIssue';
 import OfficeSupplies from './../views/officeSupplies';
 import HumanResources from './../views/humanResources';
+import ConferenceRoom from './../views/conferenceRoom';
 
 Vue.use(Router);
 
@@ -74,6 +75,11 @@ export default new Router({
             path: '/humanResources',
             name: 'humanResources',
             component: HumanResources
+        },
+        {
+            path: '/conferenceRoom',
+            name: 'conferenceRoom',
+            component: ConferenceRoom
         }
     ]
 });
