@@ -11,6 +11,7 @@
       :maxlength="maxlength"
       :resize="resize"
       :autosize="autosize"
+      :disabled="disabled"
     >
       <template v-if="append" slot="append">{{append}}</template>
     </el-input>
@@ -31,7 +32,8 @@ export default {
         'maxlength',
         'append',
         'resize',
-        'autosize'
+        'autosize',
+        'disabled'
     ],
     watch: {
         input: {
