@@ -14,6 +14,7 @@ import DataDetail from './../views/dataDetail';
 import FileRelease from './../views/fileRelease';
 import InformationIssue from './../views/informationIssue';
 import OfficeSupplies from './../views/officeSupplies';
+import HumanResources from './../views/humanResources';
 
 Vue.use(Router);
 
@@ -68,6 +69,11 @@ export default new Router({
             path: '/officeSupplies',
             name: 'officeSupplies',
             component: OfficeSupplies
+        },
+        {
+            path: '/humanResources',
+            name: 'humanResources',
+            component: HumanResources
         }
     ]
 });

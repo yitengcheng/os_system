@@ -1,3 +1,5 @@
+const moment = require('moment');
+
 // 手机号
 export function isvalidPhone (phone) {
     const reg = /^1[3|4|5|7|8][0-9]\d{8}$/;
@@ -37,4 +39,20 @@ export function isInteger (number) {
 export function judgeInputText (string) {
     const reg = /^[\u4e00-\u9fa5a-z]+$/gi;
     return reg.test(string);
+}
+
+// 获取年龄
+export function getAge (birthday) {
+    let birth = moment(birthday);
+    let months = moment().diff(birth, 'months', true);
+    let birthSpan = { year: Math.floor(months / 12), month: Math.floor(months) % 12, day: Math.round((months % 1) * moment().daysInMonth(), 0) };
+    if (birthSpan.year < 1 && birthSpan.month < 1) {
+        return birthSpan.day + ' 天';
+    } else if (birthSpan.year < 1) {
+        return birthSpan.month + ' 月' + birthSpan.day + ' 天';
+    } else if (birthSpan.year < 2) {
+        return birthSpan.year + ' 岁' + birthSpan.month + ' 月';
+    } else {
+        return birthSpan.year + ' 岁';
+    }
 }
