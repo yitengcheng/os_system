@@ -20,7 +20,7 @@
       >
         <template slot-scope="scope">
           <slot v-if="!data.prop" :data="scope"></slot>
-          <p class="itemText" v-else>{{scope.row[data.prop]}}</p>
+          <p class="itemText" v-else>{{scope.row[data.prop]}}{{data.unit ? data.unit : ''}}</p>
         </template>
       </el-table-column>
     </el-table>
