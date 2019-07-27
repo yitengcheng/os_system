@@ -91,11 +91,11 @@ export default {
     },
     methods: {
         ...mapMutations('user', ['updateUser']),
-        closeModel () {
+        closeModel (flag) {
             this.modelVisible = false;
             this.logoutVisible = false;
             this.modifyVisible = false;
-            this.$refs.login.resetFields();
+            this.$refs.login && this.$refs.login.resetFields();
         },
         onChangeName () {
             this.name = this.userInfo.name;
@@ -127,6 +127,12 @@ export default {
         logout () {
             this.updateUser('');
             this.closeModel();
+            this.userInfo = {
+                name: '',
+                password: ''
+            };
+            this.name = '';
+            this.password = '';
             this.$router.replace({
                 path: '/'
             });

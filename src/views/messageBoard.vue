@@ -55,8 +55,8 @@ export default {
                 for (let i = 0; i < messageList.length; i++) {
                     this.pushDm(messageList[i]);
                 }
+                this.start();
             }
-            this.start();
         });
     },
     destroyed () {

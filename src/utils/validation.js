@@ -14,7 +14,7 @@ export function isvalidPlate (plate) {
 
 // 正整数（不包含0,不包含小数）
 export function isPositiveInteger (number) {
-    const reg = /^[1 - 9]\d*$/;
+    const reg = /^[1-9]\d*$/;
     return reg.test(number);
 }
 
