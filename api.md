@@ -123,6 +123,25 @@
             success: true
         })
 
+7. getPersonsForBranch(post) 根据部门获取人员列表
+    参数：branchId
+    返回：res.json({
+            success: true,
+            persons: [
+                {
+                    "name": String
+                    "userName": String,
+                    "createTime": String,
+                    "birthday": String,
+                    "sex": String,
+                    "phone": String,
+                    "email": String,
+                    "head": String,
+                    "permissions": Array
+                }
+            ]
+        })
+
 # 公司发文
 1. getProfiles(post) 获取公司发文列表
     参数：pageNo, pageSize
@@ -263,6 +282,12 @@
 
 3. subscribeConferenceRoom(post) 预约使用会议室
     参数: roomId, appointmentTime
+    返回：res.json({
+            success: true
+        })
+
+4. confirmAfterUse(post) 确认会议室使用完毕
+    参数: roomId
     返回：res.json({
             success: true
         })
