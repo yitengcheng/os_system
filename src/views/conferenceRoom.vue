@@ -7,11 +7,19 @@
       </div>
       <ElTable :stripe="true" :border="true" :tableKey="labels" :tableData="tableData">
         <div slot-scope="data">
+          <el-button @click.native.prevent="showAddModel(data.data.row)" type="text" size="small">编辑</el-button>
           <el-button
+            v-if="data.data.row.roomStatus === '空闲'"
             @click.native.prevent="showSubscribeModel(data.data.row)"
             type="text"
             size="small"
           >预约</el-button>
+          <el-button
+            v-else
+            @click.native.prevent="confirmAfterUse(data.data.row)"
+            type="text"
+            size="small"
+          >确认使用完毕</el-button>
         </div>
       </ElTable>
     </div>
@@ -185,14 +193,18 @@ export default {
             this.addModelFlag = false;
             this.subscribeModelFlag = false;
         },
-        showAddModel () {
+        showAddModel (room) {
+            room ? (this.conferenceRoom = room) : (room = {});
             this.addModelFlag = true;
         },
         addConferenceRoom () {
             this.$refs.conferenceRoom.validate(valid => {
                 if (valid) {
+                    let url = this.conferenceRoom.roomId
+                        ? '/api/updateConferenceRoom'
+                        : '/api/addConferenceRoom';
                     this.$http
-                        .post('/api/addConferenceRoom', {
+                        .post(url, {
                             room: this.conferenceRoom
                         })
                         .then(res => {
@@ -238,6 +250,25 @@ export default {
                     this.$alert('请注意核对信息');
                 }
             });
+        },
+        confirmAfterUse (room) {
+            this.$confirm(`${room.name}是否已经使用完毕`, '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    this.$http.post('/api/confirmAfterUse', { ...room }).then(res => {
+                        let { success, msg } = res;
+                        if (success) {
+                            this.closeModel();
+                            this.getConferenceRooms();
+                        } else {
+                            this.$alert(msg);
+                        }
+                    });
+                })
+                .catch(() => {});
         }
     }
 };
