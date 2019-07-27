@@ -16,6 +16,7 @@ import InformationIssue from './../views/informationIssue';
 import OfficeSupplies from './../views/officeSupplies';
 import HumanResources from './../views/humanResources';
 import ConferenceRoom from './../views/conferenceRoom';
+import VehicleManagement from './../views/vehicleManagement';
 
 Vue.use(Router);
 
@@ -80,6 +81,11 @@ export default new Router({
             path: '/conferenceRoom',
             name: 'conferenceRoom',
             component: ConferenceRoom
+        },
+        {
+            path: '/vehicleManagement',
+            name: 'vehicleManagement',
+            component: VehicleManagement
         }
     ]
 });
