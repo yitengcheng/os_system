@@ -60,6 +60,7 @@ export default {
 }
 .el-scrollbar__wrap {
   overflow-x: hidden;
+  margin-bottom: 0px !important;
 }
 .elHeader {
   background-color: $color-background-d;
