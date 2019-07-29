@@ -18,6 +18,9 @@ import HumanResources from './../views/humanResources';
 import ConferenceRoom from './../views/conferenceRoom';
 import VehicleManagement from './../views/vehicleManagement';
 
+// 个人办公
+import Schedule from './../views/schedule';
+
 Vue.use(Router);
 
 export default new Router({
@@ -86,6 +89,11 @@ export default new Router({
             path: '/vehicleManagement',
             name: 'vehicleManagement',
             component: VehicleManagement
+        },
+        {
+            path: '/schedule',
+            name: 'schedule',
+            component: Schedule
         }
     ]
 });
