@@ -54,6 +54,8 @@ export default {
 </script>
 <style lang='scss' scoped>
 .itemText {
+  height: 35px;
+  line-height: 35px;
   font-size: 12px;
   color: #666;
 }
