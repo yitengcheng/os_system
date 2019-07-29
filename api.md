@@ -316,7 +316,7 @@
             ]
         })
 
-3. addCarRecord(post) 添加车辆预约
+3. bookingOfVehicles(post) 添加车辆预约
     参数: carId, application, serviceTime
     返回：res.json({
             success: true
@@ -351,7 +351,7 @@
 
 # 日程安排
 1. addSchedule(post) 添加日程
-    参数: userId, date, time, desc
+    参数: userId, date, desc
     返回：res.json({
             success: true
         })
@@ -363,9 +363,15 @@
             scheduleList:[
                 {
                     date:String,
-                    planList:[{time:String,desc:String}]
+                    desc:String
                 }
             ]
+        })
+
+3. updateSchedule(post) 修改日程安排
+    参数: userId, date, time, desc
+    返回：res.json({
+            success: true
         })
 
 # 个人通讯录
