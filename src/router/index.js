@@ -20,6 +20,7 @@ import VehicleManagement from './../views/vehicleManagement';
 
 // 个人办公
 import Schedule from './../views/schedule';
+import FileExchange from './../views/fileExchange';
 
 Vue.use(Router);
 
@@ -94,6 +95,11 @@ export default new Router({
             path: '/schedule',
             name: 'schedule',
             component: Schedule
+        },
+        {
+            path: '/fileExchange',
+            name: 'fileExchange',
+            component: FileExchange
         }
     ]
 });
