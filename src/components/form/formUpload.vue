@@ -6,10 +6,14 @@
       action="/api/upload"
       :http-request="upload"
       :file-list="fileList"
+      :on-remove="remove"
+      :accept="accept"
+      :before-upload="before"
       multiple
     >
       <i v-if="listType !== 'text'" class="el-icon-plus"></i>
       <el-button v-else size="small" type="primary">点击上传</el-button>
+      <div v-if="accept" slot="tip" class="el-upload__tip">只能上传{{accept}}文件</div>
     </el-upload>
   </el-form-item>
 </template>
@@ -17,16 +21,23 @@
 <script>
 export default {
     name: 'upload',
-    props: ['img', 'value', 'label', 'listType'],
+    props: ['img', 'value', 'label', 'listType', 'accept', 'form'],
     data () {
         return {
-            imageUrl: '',
             dialogVisible: false,
             fileList: []
         };
     },
+    watch: {
+        form: {
+            handler (newValue, oldValue) {
+                this.fileList = newValue[this.value] || [];
+            },
+            deep: true
+        }
+    },
     mounted () {
-        this.imageUrl = this.img || '';
+        this.fileList = this.form[this.value] || [];
     },
     methods: {
         upload () {
@@ -40,9 +51,34 @@ export default {
             formData.append('image', file.raw);
             this.$http.post('/api/upload', formData, headerConfig).then(res => {
                 let { success, url } = res;
-                this.fileList.push({ url: this.$API + url });
+                let name = url.split('/');
+                this.fileList.push({
+                    url: this.$API + url,
+                    name: name[name.length - 1]
+                });
                 this.$emit('onChange', this.fileList, this.value);
             });
+        },
+        before (file) {
+            let testmsg = file.name.substring(file.name.lastIndexOf('.'));
+            let acceptList = this.accept.split(',');
+            let flag = this._.findIndex(acceptList, o => {
+                return o.trim() === testmsg;
+            });
+            if (this.accept && flag === -1) {
+                this.$message({
+                    message: `上传文件只能是 ${this.accept}格式!`,
+                    type: 'warning'
+                });
+            }
+            return this.accept && flag !== -1;
+        },
+        remove (file) {
+            let index = this._.findIndex(this.fileList, o => {
+                return o.uid === file.uid;
+            });
+            this.fileList.splice(index, 1);
+            this.$emit('onChange', this.fileList, this.value);
         }
     }
 };
