@@ -6,8 +6,20 @@
       <template slot="dateCell" slot-scope="{date, data}" @onClick="test">
         <el-button
           :class="data.isSelected ? 'is-selected' : ''"
-          @click="test"
+          @click.native.prevent="test(data)"
         >{{ data.day.split('-').slice(1).join('-') }}</el-button>
+        <div v-for="(item,index) in schedule" :key="index">
+          <div
+            v-if="data.day === item.date"
+            class="info"
+          >{{data.day === item.date ? item.planList[0].desc : ''}}</div>
+          <el-button
+            v-if="data.day === item.date"
+            class="look-info"
+            type="text"
+            @click.native.prevent="lookInfo(item)"
+          >{{data.day === item.date ? '详情':''}}</el-button>
+        </div>
       </template>
     </el-calendar>
     <showModel
@@ -20,8 +32,8 @@
       <div slot="content">
         <el-input
           class="input"
-          :autosize="{ minRows: 5, maxRows: 5}"
-          maxlength="100"
+          :autosize="{ minRows: 7, maxRows: 7}"
+          maxlength="200"
           show-word-limit
           type="textarea"
           resize="none"
@@ -44,37 +56,59 @@ export default {
     data () {
         return {
             ModelVisible: false,
-            input: ''
+            input: '',
+            schedule: '',
+            date: ''
         };
     },
-    // watch: {
-    //     data: {
-    //         handler (newValue) {
-    //             console.log('1111', newValue);
-    //         },
-    //         deep: true
-    //     }
-    // },
     computed: {
         ...mapState({
             user: state => state.user.user
         })
     },
     mounted () {
-        this.$http.post('/api/getSchedule', { userId: this.user._id }).then(res => {
-            let { success, msg, scheduleList } = res;
-            if (success) {
-                // console.log('----', scheduleList);
-            } else {
-                this.$alert(msg);
-            }
-        });
+        this.getschedule();
     },
     methods: {
-        test () {
+        test (data) {
             this.ModelVisible = true;
+            this.date = data.day;
         },
-        doConfirm () {},
+        getschedule () {
+            this.$http
+                .post('/api/getSchedule', { userId: this.user._id })
+                .then(res => {
+                    let { success, msg, scheduleList } = res;
+                    if (success) {
+                        this.schedule = scheduleList;
+                    } else {
+                        this.$alert(msg);
+                    }
+                });
+        },
+        doConfirm () {
+            this.$http
+                .post('/api/addSchedule', {
+                    userId: this.user._id,
+                    date: this.date,
+                    desc: this.input
+                })
+                .then(res => {
+                    let { success, msg } = res;
+                    if (success) {
+                        this.$alert('添加成功');
+                        this.date = '';
+                        this.input = '';
+                        this.ModelVisible = false;
+                        this.getschedule();
+                    } else {
+                        this.$alert(msg);
+                    }
+                });
+        },
+        lookInfo (data) {
+            this.$alert(data.planList[0].desc);
+        },
         closeModel () {
             this.ModelVisible = false;
         }
@@ -92,11 +126,22 @@ export default {
 .item {
   flex-direction: column;
 }
+.info {
+  width: 100px;
+  word-break: keep-all;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 5px;
+}
+.look-info {
+  float: right;
+}
 .is-selected {
   color: #1989fa;
 }
 .input {
-  height: 100px;
+  height: 145px;
   width: 500px;
 }
 </style>
