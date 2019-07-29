@@ -305,6 +305,7 @@ export default {
             });
         },
         getPersons (value, formType) {
+            this.personList = [];
             this.$http
                 .post('/api/getPersonsForBranch', { branchId: value })
                 .then(res => {
@@ -399,7 +400,6 @@ export default {
                             }
                         });
                 } else {
-                    this.closeModel('subscribeModelFlag');
                     this.$alert('请注意核对信息');
                 }
             });
@@ -422,7 +422,6 @@ export default {
                             }
                         });
                 } else {
-                    this.closeModel('confirmModelFlag');
                     this.$alert('请注意核对信息');
                 }
             });
