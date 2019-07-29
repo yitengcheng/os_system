@@ -5,6 +5,7 @@
       <!-- 这里使用的是 2.5 slot 语法，对于新项目请使用 2.6 slot 语法-->
       <template slot="dateCell" slot-scope="{date, data}" @onClick="test">
         <el-button
+          type="text"
           :class="data.isSelected ? 'is-selected' : ''"
           @click.native.prevent="test(data)"
         >{{ data.day.split('-').slice(1).join('-') }}</el-button>
@@ -12,7 +13,7 @@
           <div
             v-if="data.day === item.date"
             class="info"
-          >{{data.day === item.date ? item.planList[0].desc : ''}}</div>
+          >{{data.day === item.date ? item.desc : ''}}</div>
           <el-button
             v-if="data.day === item.date"
             class="look-info"
@@ -38,7 +39,29 @@
           type="textarea"
           resize="none"
           v-model="input"
-          placeholder="请输入留言"
+          placeholder="请输入日程"
+        ></el-input>
+      </div>
+    </showModel>
+    <showModel
+      title="日程详情"
+      :dialogVisible="infoModelVisible"
+      @close="closeModel(true)"
+      @doCancel="closeModel(true)"
+      @doConfirm="edit"
+      cancel="关闭"
+      confirm="修改"
+    >
+      <div slot="content">
+        <el-input
+          class="input"
+          :autosize="{ minRows: 7, maxRows: 7}"
+          maxlength="200"
+          show-word-limit
+          type="textarea"
+          resize="none"
+          v-model="infoText"
+          placeholder="请输入日程"
         ></el-input>
       </div>
     </showModel>
@@ -56,9 +79,11 @@ export default {
     data () {
         return {
             ModelVisible: false,
+            infoModelVisible: false,
             input: '',
             schedule: '',
-            date: ''
+            date: '',
+            infoText: ''
         };
     },
     computed: {
@@ -71,6 +96,12 @@ export default {
     },
     methods: {
         test (data) {
+            for (let i = 0; i < this.schedule.length; i++) {
+                const item = this.schedule[i];
+                if (item.date === data.day) {
+                    return;
+                }
+            }
             this.ModelVisible = true;
             this.date = data.day;
         },
@@ -107,10 +138,13 @@ export default {
                 });
         },
         lookInfo (data) {
-            this.$alert(data.planList[0].desc);
+            this.infoText = data.desc;
+            this.infoModelVisible = true;
         },
+        edit () {},
         closeModel () {
             this.ModelVisible = false;
+            this.infoModelVisible = false;
         }
     }
 };
