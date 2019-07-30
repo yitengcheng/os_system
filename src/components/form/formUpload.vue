@@ -21,7 +21,7 @@
 <script>
 export default {
     name: 'upload',
-    props: ['img', 'value', 'label', 'listType', 'accept', 'form'],
+    props: ['value', 'label', 'listType', 'accept', 'form'],
     data () {
         return {
             dialogVisible: false,

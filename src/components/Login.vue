@@ -7,11 +7,9 @@
       @click="modelVisible = true"
     >登录</el-button>
     <div class="user" v-else>
-      <div class="user" @click="toUserDetail">
-        <el-image :src="user.head ||'static/default.png'" class="head"></el-image>
+      <div class="user">
         <div class="userName">{{user.name}}</div>
       </div>
-
       <el-button
         @click="logoutVisible = true"
         size="mini"
@@ -121,7 +119,7 @@ export default {
         },
         toUserDetail () {
             this.$router.push({
-                name: 'UserDetail'
+                name: 'userDetail'
             });
         },
         logout () {
@@ -154,6 +152,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 10px;
 }
 .head {
   width: 70px;
