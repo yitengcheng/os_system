@@ -21,6 +21,7 @@ import VehicleManagement from './../views/vehicleManagement';
 // 个人办公
 import Schedule from './../views/schedule';
 import FileExchange from './../views/fileExchange';
+import PasswordManagement from './../views/passwordManagement';
 
 Vue.use(Router);
 
@@ -100,6 +101,11 @@ export default new Router({
             path: '/fileExchange',
             name: 'fileExchange',
             component: FileExchange
+        },
+        {
+            path: '/passwordManagement',
+            name: 'passwordManagement',
+            component: PasswordManagement
         }
     ]
 });
