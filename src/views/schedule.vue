@@ -3,11 +3,11 @@
     <PageTitle label="日程安排" />
     <el-calendar class="item">
       <!-- 这里使用的是 2.5 slot 语法，对于新项目请使用 2.6 slot 语法-->
-      <template slot="dateCell" slot-scope="{date, data}" @onClick="test">
+      <template slot="dateCell" slot-scope="{date, data}">
         <el-button
           type="text"
           :class="data.isSelected ? 'is-selected' : ''"
-          @click.native.prevent="test(data)"
+          @click.native.prevent="add(data)"
         >{{ data.day.split('-').slice(1).join('-') }}</el-button>
         <div v-for="(item,index) in schedule" :key="index">
           <div
@@ -95,7 +95,7 @@ export default {
         this.getschedule();
     },
     methods: {
-        test (data) {
+        add (data) {
             for (let i = 0; i < this.schedule.length; i++) {
                 const item = this.schedule[i];
                 if (item.date === data.day) {
