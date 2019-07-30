@@ -3,11 +3,11 @@
     <PageTitle label="日程安排" />
     <el-calendar class="item">
       <!-- 这里使用的是 2.5 slot 语法，对于新项目请使用 2.6 slot 语法-->
-      <template slot="dateCell" slot-scope="{date, data}" @onClick="test">
+      <template slot="dateCell" slot-scope="{date, data}">
         <el-button
           type="text"
           :class="data.isSelected ? 'is-selected' : ''"
-          @click.native.prevent="test(data)"
+          @click.native.prevent="add(data)"
         >{{ data.day.split('-').slice(1).join('-') }}</el-button>
         <div v-for="(item,index) in schedule" :key="index">
           <div
@@ -95,7 +95,7 @@ export default {
         this.getschedule();
     },
     methods: {
-        test (data) {
+        add (data) {
             for (let i = 0; i < this.schedule.length; i++) {
                 const item = this.schedule[i];
                 if (item.date === data.day) {
@@ -139,9 +139,29 @@ export default {
         },
         lookInfo (data) {
             this.infoText = data.desc;
+            this.date = data.date;
             this.infoModelVisible = true;
         },
-        edit () {},
+        edit () {
+            this.$http
+                .post('/api/updateSchedule', {
+                    userId: this.user._id,
+                    date: this.date,
+                    desc: this.infoText
+                })
+                .then(res => {
+                    let { success, msg } = res;
+                    if (success) {
+                        this.$alert('修改成功');
+                        this.date = '';
+                        this.infoText = '';
+                        this.infoModelVisible = false;
+                        this.getschedule();
+                    } else {
+                        this.$alert(msg);
+                    }
+                });
+        },
         closeModel () {
             this.ModelVisible = false;
             this.infoModelVisible = false;
