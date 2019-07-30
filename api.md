@@ -413,13 +413,13 @@
         })
 
 2. removePassword(post) 删除密码信息
-    参数: userId, passwordId
+    参数: userId, accountId
     返回：res.json({
             success: true
         })
 
 3. updatePassword(post) 修改密码信息
-    参数: userId, passwordId
+    参数: userId, accountId
     返回：res.json({
             success: true
         })
