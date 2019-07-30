@@ -139,9 +139,29 @@ export default {
         },
         lookInfo (data) {
             this.infoText = data.desc;
+            this.date = data.date;
             this.infoModelVisible = true;
         },
-        edit () {},
+        edit () {
+            this.$http
+                .post('/api/updateSchedule', {
+                    userId: this.user._id,
+                    date: this.date,
+                    desc: this.infoText
+                })
+                .then(res => {
+                    let { success, msg } = res;
+                    if (success) {
+                        this.$alert('修改成功');
+                        this.date = '';
+                        this.infoText = '';
+                        this.infoModelVisible = false;
+                        this.getschedule();
+                    } else {
+                        this.$alert(msg);
+                    }
+                });
+        },
         closeModel () {
             this.ModelVisible = false;
             this.infoModelVisible = false;
