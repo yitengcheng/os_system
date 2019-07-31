@@ -135,7 +135,11 @@ export default {
             this[model] = true;
             targetAccount
                 ? (this.accountInfo = targetAccount)
-                : (this.accountInfo = {});
+                : (this.accountInfo = {
+                    desc: '',
+                    accountNumber: '',
+                    accountPassword: ''
+                });
         },
         closeModel (model) {
             this[model] = false;
