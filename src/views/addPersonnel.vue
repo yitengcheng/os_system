@@ -1,7 +1,13 @@
 <template>
   <div class="contain">
     <PageTitle label="添加人员" />
-    <el-form class="formContain" :model="form" label-width="110px" label-position="right">
+    <el-form
+      class="formContain"
+      :model="form"
+      label-width="130px"
+      label-position="right"
+      :rules="rules"
+    >
       <FormInput label="姓名" :form="form" value="name" @onChange="onChange" />
       <FormSelect
         :options="branchList"
@@ -22,6 +28,20 @@
       <FormInput label="登录系统用户名" :form="form" value="userName" @onChange="onChange" />
       <FormInput label="登录系统密码" :form="form" value="password" @onChange="onChange" />
       <FormRadio :checks="['男','女']" label="性别" :form="form" value="sex" @onChange="onChange" />
+      <FormRadio
+        :checks="['高中','中专','大专','本科','硕士','博士']"
+        label="学历"
+        :form="form"
+        value="educationBackground"
+        @onChange="onChange"
+      />
+      <FormRadio
+        :checks="['是','否']"
+        label="返聘人员"
+        :form="form"
+        value="restart"
+        @onChange="onChange"
+      />
       <FormDateTime
         options="[]"
         label="生日"
@@ -44,19 +64,61 @@ import PageTitle from '../components/PageTitle';
 export default {
     components: { PageTitle, FormInput, FormRadio, FormDateTime, FormSelect },
     data () {
+        let validatorIsvalidPhone = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请输入手机号'));
+            } else if (value.length !== 11) {
+                callback(new Error('手机号长度有误'));
+            } else if (!this.$utils.isvalidPhone(value)) {
+                callback(new Error('请输入正确手机号'));
+            } else {
+                callback();
+            }
+        };
         return {
             form: {
                 name: '',
-                branchId: '',
-                positionId: '',
+                branch: '',
+                position: '',
                 phone: '',
                 email: '',
                 userName: '',
                 password: '',
                 sex: 0,
+                educationBackground: 2,
+                restart: 1,
                 birthday: ''
             },
-            rules: [],
+            rules: {
+                name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
+                branch: [{ required: true, message: '请选择部门', trigger: 'blur' }],
+                position: [{ required: true, message: '请选择职位', trigger: 'blur' }],
+                phone: [
+                    { required: true, validator: validatorIsvalidPhone, trigger: 'blur' }
+                ],
+                email: [
+                    { required: true, message: '请输入邮箱', trigger: 'blur' },
+                    {
+                        type: 'email',
+                        message: '请输入正确的邮箱地址',
+                        trigger: ['blur', 'change']
+                    }
+                ],
+                userName: [
+                    { required: true, message: '请输入登录系统账户', trigger: 'blur' }
+                ],
+                password: [
+                    { required: true, message: '请输入登录系统密码', trigger: 'blur' }
+                ],
+                sex: [{ required: true, message: '请选择性别', trigger: 'blur' }],
+                educationBackground: [
+                    { required: true, message: '请选择学历', trigger: 'blur' }
+                ],
+                restart: [
+                    { required: true, message: '请选择是否为返聘人员', trigger: 'blur' }
+                ],
+                birthday: [{ required: true, message: '请选择生日', trigger: 'blur' }]
+            },
             branchList: [],
             positionList: []
         };
