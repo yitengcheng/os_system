@@ -1,6 +1,12 @@
 <template>
   <el-form-item :label="label" :prop="value">
-    <el-select class="select" v-model="input" :placeholder="place" @change="onChange">
+    <el-select
+      :multiple="multiple || false"
+      class="select"
+      v-model="input"
+      :placeholder="place"
+      @change="onChange"
+    >
       <el-option
         v-for="(option,index) in options"
         :key="index"
@@ -13,7 +19,7 @@
 
 <script>
 export default {
-    props: ['form', 'label', 'value', 'options', 'placeholder'],
+    props: ['form', 'label', 'value', 'options', 'placeholder', 'multiple'],
     watch: {
         input: {
             handler (newValue, oldValue) {
@@ -22,7 +28,11 @@ export default {
         },
         form: {
             handler (newValue, oldValue) {
-                this.input = newValue[this.value] || '';
+                if (this.multiple) {
+                    this.input = newValue[this.value] || [];
+                } else {
+                    this.input = newValue[this.value] || '';
+                }
             },
             deep: true
         }
@@ -34,16 +44,17 @@ export default {
         };
     },
     mounted () {
-        this.input = this.form[this.value] || '';
+        if (this.multiple) {
+            this.input = this.form[this.value] || [];
+        } else {
+            this.input = this.form[this.value] || '';
+        }
         this.place = this.placeholder || '请选择' + this.label;
     },
     methods: {
         onChange (value) {
             this.input = value;
             this.$emit('onChange', value, this.value);
-        },
-        reset () {
-            this.input = '';
         }
     }
 };
