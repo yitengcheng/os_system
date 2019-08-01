@@ -41,15 +41,42 @@
       <WordCloud></WordCloud>
       <v-chart :options="option"></v-chart>
     </div>
+    <showModel
+      title=" "
+      :dialogVisible="ModelVisible"
+      @close="closeModel(true)"
+      @doConfirm="closeModel(true)"
+      confirm="关闭"
+      :hiddenCancel="true"
+    >
+      <div slot="content" class="class-info">
+        <h1 class="class-title">{{information.title}}</h1>
+        <p class="class-desc">
+          <span class="class-space"></span>
+          {{information.desc}}
+        </p>
+        <div class="class-author">{{information.author}}</div>
+        <div class="class-createTime">{{information.createTime}}</div>
+      </div>
+    </showModel>
   </div>
 </template>
 
 <script>
 import WordCloud from '../components/WordCloud';
+import showModel from '../components/showModel';
+import { mapState } from 'vuex';
 export default {
-    components: { WordCloud },
+    components: { WordCloud, showModel },
     data () {
         return {
+            ModelVisible: false,
+            information: {
+                title: '',
+                desc: '',
+                createTime: '',
+                author: ''
+            },
             option: {
                 color: ['#3398DB'],
                 tooltip: {
@@ -102,8 +129,40 @@ export default {
             }
         };
     },
-    computed: {},
-    methods: {}
+    mounted () {
+        this.getNewInformation();
+    },
+    computed: {
+        ...mapState({
+            user: state => state.user.user
+        })
+    },
+    watch: {
+        user: {
+            handler (newValue, oldValue) {
+                if (this.user) {
+                    this.ModelVisible = true;
+                }
+            },
+            deep: true
+        }
+    },
+    methods: {
+        getNewInformation () {
+            this.$http.post('/api/getNewInformation').then(res => {
+                let { success, msg, information } = res;
+                if (success) {
+                    this.information = information;
+                } else {
+                    this.$alert(msg);
+                }
+            });
+        },
+        closeModel () {
+            this.ModelVisible = false;
+        },
+        doConfirm () {}
+    }
 };
 </script>
 <style lang='scss' scoped>
@@ -144,5 +203,35 @@ export default {
   justify-content: center;
   padding: 20px;
   background-color: #f3f3f3;
+}
+.class-info {
+  width: 700px;
+}
+.class-title {
+  font-weight: 900;
+  font-size: 20px;
+  margin-bottom: 40px;
+  text-align: center;
+}
+.class-space {
+  margin-left: 31px;
+}
+.class-desc {
+  font-weight: 500;
+  font-size: 16px;
+  margin-bottom: 40px;
+}
+.class-author {
+  font-weight: 500;
+  font-size: 16px;
+  margin-bottom: 5px;
+  text-align: end;
+  margin-right: 12px;
+}
+.class-createTime {
+  font-weight: 500;
+  font-size: 16px;
+  text-align: end;
+  margin-right: 12px;
 }
 </style>
