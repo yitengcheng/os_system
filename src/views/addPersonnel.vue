@@ -4,6 +4,7 @@
     <el-form
       class="formContain"
       :model="form"
+      ref="form"
       label-width="130px"
       label-position="right"
       :rules="rules"
@@ -23,7 +24,7 @@
         value="position"
         @onChange="onChange"
       />
-      <FormInput label="电话" :form="form" value="phone" @onChange="onChange" />
+      <FormInput label="电话" :form="form" value="phone" @onChange="onChange" maxlength="11" />
       <FormInput label="电子邮箱" :form="form" value="email" @onChange="onChange" />
       <FormInput label="登录系统用户名" :form="form" value="userName" @onChange="onChange" />
       <FormInput label="登录系统密码" :form="form" value="password" @onChange="onChange" />
@@ -147,19 +148,25 @@ export default {
             this.form[formType] = value;
         },
         doSubmit () {
-            this.$http.post('/api/addPerson', { user: this.form }).then(res => {
-                let { success, msg } = res;
-                if (success) {
-                    this.$confirm('创建成功,点击确定回到上一页面', '提示', {
-                        confirmButtonText: '确定',
-                        type: 'success'
-                    })
-                        .then(() => {
-                            this.$router.back();
-                        })
-                        .catch(() => {});
+            this.$refs.form.validate(valid => {
+                if (valid) {
+                    this.$http.post('/api/addPerson', { user: this.form }).then(res => {
+                        let { success, msg } = res;
+                        if (success) {
+                            this.$confirm('创建成功,点击确定回到上一页面', '提示', {
+                                confirmButtonText: '确定',
+                                type: 'success'
+                            })
+                                .then(() => {
+                                    this.$router.back();
+                                })
+                                .catch(() => {});
+                        } else {
+                            this.$alert(msg);
+                        }
+                    });
                 } else {
-                    this.$alert(msg);
+                    this.$alert('请认真核对信息');
                 }
             });
         }
