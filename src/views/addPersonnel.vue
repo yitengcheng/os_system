@@ -18,7 +18,7 @@
       />
       <FormSelect
         :options="positionList"
-        label="职位"
+        label="级别"
         :form="form"
         value="position"
         @onChange="onChange"
@@ -92,7 +92,7 @@ export default {
             rules: {
                 name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
                 branch: [{ required: true, message: '请选择部门', trigger: 'blur' }],
-                position: [{ required: true, message: '请选择职位', trigger: 'blur' }],
+                position: [{ required: true, message: '请选择级别', trigger: 'blur' }],
                 phone: [
                     { required: true, validator: validatorIsvalidPhone, trigger: 'blur' }
                 ],

@@ -32,7 +32,7 @@ export default {
                 },
                 {
                     prop: 'position',
-                    label: '职位',
+                    label: '级别',
                     width: '80'
                 },
                 {

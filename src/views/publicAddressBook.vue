@@ -30,7 +30,7 @@ export default {
             tableData: [],
             tableKey: [
                 { prop: 'branch', label: '部门', width: '300' },
-                { prop: 'position', label: '职位', width: '300' },
+                { prop: 'position', label: '级别', width: '300' },
                 { prop: 'name', label: '姓名', width: '300' },
                 { prop: 'phone', label: '联系电话', width: '400' }
             ]

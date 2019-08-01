@@ -40,7 +40,7 @@
           />
           <FormSelect
             :options="positionList"
-            label="职位"
+            label="级别"
             :form="adjust"
             value="positionId"
             @onChange="onChange"
@@ -68,7 +68,7 @@ export default {
                 },
                 {
                     prop: 'position',
-                    label: '职位',
+                    label: '级别',
                     width: '150'
                 },
                 {
@@ -105,7 +105,7 @@ export default {
             },
             rules: {
                 branchId: [{ required: true, message: '请选择部门', trigger: 'blur' }],
-                positionId: [{ required: true, message: '请选择职位', trigger: 'blur' }]
+                positionId: [{ required: true, message: '请选择级别', trigger: 'blur' }]
             },
             branchList: [],
             positionList: []
