@@ -22,6 +22,7 @@ import VehicleManagement from './../views/vehicleManagement';
 import Schedule from './../views/schedule';
 import FileExchange from './../views/fileExchange';
 import PasswordManagement from './../views/passwordManagement';
+import PersonalAddressBook from './../views/personalAddressBook';
 
 Vue.use(Router);
 
@@ -106,6 +107,11 @@ export default new Router({
             path: '/passwordManagement',
             name: 'passwordManagement',
             component: PasswordManagement
+        },
+        {
+            path: '/personalAddressBook',
+            name: 'personalAddressBook',
+            component: PersonalAddressBook
         }
     ]
 });
