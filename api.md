@@ -10,8 +10,8 @@
             ]
         })
 
-# 职位
-1. getPositions(post) 获取职位
+# 级别
+1. getPositions(post) 获取级别
     参数：无
     返回：res.json({
             success: true,
@@ -165,6 +165,27 @@
         }
     返回：res.json({
             success: true
+        })
+
+3. reviewThePost(post) 审核同意
+    参数：userId, profileId
+    返回：res.json({
+            success: true
+        })
+
+4. getPendingProfiles() 获取待审核文件列表
+    参数：pageNo, pageSize, userId
+    返回：res.json({
+            success: true,
+            fileList: [
+                {
+                    title: String,
+                    desc: String,
+                    filePath: Array,
+                    author: String,
+                    profileId: String
+                }
+            ]
         })
 
 # 公告信息
