@@ -226,9 +226,7 @@ export default {
             });
         },
         downLoad (file) {
-            file.filePath.forEach(item => {
-                window.open(item.url);
-            });
+            window.open(file.url);
         }
     }
 };
