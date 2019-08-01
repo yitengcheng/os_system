@@ -35,7 +35,7 @@
         :form="form"
         value="file"
         @onChange="onChange"
-        accept=".doc, .doxc"
+        accept=".doc, .docx"
       ></FormUpload>
       <el-button type="primary" class="submitBtn" @click="doSubmit">确认发文</el-button>
     </el-form>
