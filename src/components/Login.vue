@@ -52,6 +52,24 @@
         <p>是否确认退出登录</p>
       </div>
     </showModel>
+    <showModel
+      title=" "
+      :dialogVisible="messageVisible"
+      @close="closeModel(true)"
+      @doConfirm="closeModel(true)"
+      confirm="关闭"
+      :hiddenCancel="true"
+    >
+      <div slot="content" class="class-info">
+        <h1 class="class-title">{{information.title}}</h1>
+        <p class="class-desc">
+          <span class="class-space"></span>
+          {{information.desc}}
+        </p>
+        <div class="class-author">{{information.author}}</div>
+        <div class="class-createTime">{{information.createTime}}</div>
+      </div>
+    </showModel>
   </div>
 </template>
 
@@ -62,11 +80,18 @@ export default {
     components: { showModel },
     data () {
         return {
+            messageVisible: false,
             modelVisible: false,
             logoutVisible: false,
             userInfo: {
                 name: '',
                 password: ''
+            },
+            information: {
+                title: '',
+                desc: '',
+                createTime: '',
+                author: ''
             },
             name: '',
             password: '',
@@ -93,6 +118,7 @@ export default {
             this.modelVisible = false;
             this.logoutVisible = false;
             this.modifyVisible = false;
+            this.messageVisible = false;
             this.$refs.login && this.$refs.login.resetFields();
         },
         onChangeName () {
@@ -112,6 +138,7 @@ export default {
                     let { success, msg, user } = res;
                     if (success) {
                         this.updateUser(user);
+                        this.getNewInformation();
                     } else {
                         this.$alert(msg);
                     }
@@ -133,6 +160,17 @@ export default {
             this.password = '';
             this.$router.replace({
                 path: '/'
+            });
+        },
+        getNewInformation () {
+            this.$http.post('/api/getNewInformation').then(res => {
+                let { success, msg, information } = res;
+                if (success) {
+                    this.information = information;
+                    this.messageVisible = true;
+                } else {
+                    this.$alert(msg);
+                }
             });
         }
     }
@@ -184,5 +222,35 @@ export default {
   justify-content: flex-end;
   padding-right: 180px;
   color: #666;
+}
+.class-info {
+  width: 700px;
+}
+.class-title {
+  font-weight: 900;
+  font-size: 20px;
+  margin-bottom: 40px;
+  text-align: center;
+}
+.class-space {
+  margin-left: 31px;
+}
+.class-desc {
+  font-weight: 500;
+  font-size: 16px;
+  margin-bottom: 40px;
+}
+.class-author {
+  font-weight: 500;
+  font-size: 16px;
+  margin-bottom: 5px;
+  text-align: end;
+  margin-right: 12px;
+}
+.class-createTime {
+  font-weight: 500;
+  font-size: 16px;
+  text-align: end;
+  margin-right: 12px;
 }
 </style>
