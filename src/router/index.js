@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Main from './../views/Main';
+import Audit from './../views/audit';
 // 系统管理
 import Personnel from './../views/personnel.vue';
 import AddPersonnel from './../views/addPersonnel.vue';
@@ -112,6 +113,11 @@ export default new Router({
             path: '/personalAddressBook',
             name: 'personalAddressBook',
             component: PersonalAddressBook
+        },
+        {
+            path: '/audit',
+            name: 'audit',
+            component: Audit
         }
     ]
 });
