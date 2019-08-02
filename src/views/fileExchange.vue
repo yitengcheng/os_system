@@ -69,7 +69,7 @@
             label="文件"
             value="filePath"
             :form="sendFileInfo"
-            accept=".doc, .doxc, .xlsx, .xls"
+            accept=".doc, .docx, .xlsx, .xls"
             listType="text"
             @onChange="onChange"
           />

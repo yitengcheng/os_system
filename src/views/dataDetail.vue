@@ -6,13 +6,16 @@
       <span style="marginLeft:40px"></span>
       {{data.desc}}
     </p>
-    <el-button
+    <el-tooltip
       v-for="(file,index) in data.filePath"
       :key="index"
-      type="danger"
-      class="downloadBtn"
-      @click="downLoad(file)"
-    >点击下载附件{{index + 1}}</el-button>
+      class="item"
+      effect="dark"
+      :content="file.name"
+      placement="bottom-start"
+    >
+      <el-button type="danger" class="downloadBtn" @click="downLoad(file)">点击下载附件{{index + 1}}</el-button>
+    </el-tooltip>
   </div>
 </template>
 
@@ -59,5 +62,8 @@ export default {
   height: 45px;
   border-radius: 20px;
   align-self: center;
+}
+.item {
+  margin: 4px;
 }
 </style>
