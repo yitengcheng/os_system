@@ -456,3 +456,25 @@
                 createTime: String
             }]
         })
+
+# 考勤
+1. uploadAttendance(post) 上传考勤
+    参数: date, file 
+    返回：res.json({
+            success: true
+        })
+
+2. getAttendance(post) 获取个人考勤
+    参数: date, userId 
+    返回：res.json({
+            success: true,
+            clockInList:[
+                {
+                    date:String,
+                    clockIn: [
+                        String,
+                        String
+                    ]
+                }
+            ]
+        })
