@@ -5,41 +5,41 @@
         <icon name="职员" w="150px" h="150px" />
         <div class="infoContain">
           <p class="infoTitle">总人数</p>
-          <p class="info">50人</p>
+          <p class="info">{{totalNumberOfPeople}}人</p>
         </div>
       </div>
       <div class="companyItem">
         <icon name="男毕业生" w="150px" h="150px" />
         <div class="infoContain">
           <p class="infoTitle">研究生以上学历</p>
-          <p class="info">30人</p>
+          <p class="info">{{numberOfHighlyEducated}}人</p>
         </div>
       </div>
       <div class="companyItem">
         <icon name="老人" w="150px" h="150px" />
         <div class="infoContain">
           <p class="infoTitle">返聘人数</p>
-          <p class="info">10人</p>
+          <p class="info">{{numberOfRestart}}人</p>
         </div>
       </div>
       <div class="companyItem">
         <icon name="留言板" w="150px" h="150px" />
         <div class="infoContain">
           <p class="infoTitle">留言板</p>
-          <p class="info">10条</p>
+          <p class="info">{{messageNum}}条</p>
         </div>
       </div>
       <div class="companyItem">
         <icon name="文件" w="150px" h="150px" />
         <div class="infoContain">
           <p class="infoTitle">公司发文</p>
-          <p class="info">20份</p>
+          <p class="info">{{profileNum}}份</p>
         </div>
       </div>
     </div>
     <div class="wordCloudContain">
-      <WordCloud></WordCloud>
-      <v-chart :options="option"></v-chart>
+      <WordCloud v-if="worldCloudoption['series'][0]['data']" :option="worldCloudoption"></WordCloud>
+      <v-chart v-if="option['xAxis'][0]['data'] && option['series'][0]['data']" :options="option"></v-chart>
     </div>
   </div>
 </template>
@@ -51,6 +51,11 @@ export default {
     components: { WordCloud },
     data () {
         return {
+            totalNumberOfPeople: 0,
+            numberOfHighlyEducated: 0,
+            numberOfRestart: 0,
+            messageNum: 0,
+            profileNum: 0,
             option: {
                 color: ['#3398DB'],
                 tooltip: {
@@ -69,19 +74,6 @@ export default {
                     {
                         type: 'category',
                         axisLabel: { interval: 0, rotate: 30 },
-                        data: [
-                            '高层',
-                            '企管中心',
-                            '招商部',
-                            '物流管理部',
-                            '电子商务部',
-                            '辅助产业部',
-                            '财务部',
-                            '行政部',
-                            '物管部',
-                            '搬运队',
-                            '外场保洁'
-                        ],
                         axisTick: {
                             alignWithLabel: true
                         }
@@ -96,19 +88,88 @@ export default {
                     {
                         name: '部门',
                         type: 'bar',
-                        barWidth: '60%',
-                        data: [3, 1, 5, 10, 2, 2, 2, 7, 1, 3, 3]
+                        barWidth: '60%'
+                    }
+                ]
+            },
+            worldCloudoption: {
+                title: {
+                    text: '职员', // 标题
+                    x: 'center',
+                    textStyle: {
+                        fontSize: 18
+                    }
+                },
+                backgroundColor: '#fff',
+                series: [
+                    {
+                        name: '职员', // 数据提示窗标题
+                        type: 'wordCloud',
+                        sizeRange: [20, 66], // 画布范围，如果设置太大会出现少词（溢出屏幕）
+                        rotationRange: [-45, 90], // 数据翻转范围
+                        textPadding: 0,
+                        autoSize: {
+                            enable: true,
+                            minSize: 6
+                        },
+                        textStyle: {
+                            normal: {
+                                color: function () {
+                                    return (
+                                        'rgb(' +
+                    [
+                        Math.round(Math.random() * 160),
+                        Math.round(Math.random() * 160),
+                        Math.round(Math.random() * 160)
+                    ].join(',') +
+                    ')'
+                                    );
+                                }
+                            },
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowColor: '#333'
+                            }
+                        }
                     }
                 ]
             }
         };
     },
-    computed: {
-        ...mapState({
-            user: state => state.user.user
-        })
+    computed: {},
+    mounted () {
+        this.getHomePageData();
     },
-    methods: {}
+    methods: {
+        getHomePageData () {
+            this.$http.post('/api/getHomePageData').then(res => {
+                let {
+                    success,
+                    msg,
+                    totalNumberOfPeople,
+                    numberOfHighlyEducated,
+                    numberOfRestart,
+                    messageNum,
+                    profileNum,
+                    nameData,
+                    branchName,
+                    branchPeople
+                } = res;
+                if (success) {
+                    this.totalNumberOfPeople = totalNumberOfPeople;
+                    this.numberOfHighlyEducated = numberOfHighlyEducated;
+                    this.numberOfRestart = numberOfRestart;
+                    this.messageNum = messageNum;
+                    this.profileNum = profileNum;
+                    this.worldCloudoption['series'][0]['data'] = nameData;
+                    this.option['xAxis'][0]['data'] = branchName;
+                    this.option['series'][0]['data'] = branchPeople;
+                } else {
+                    this.$alert(msg);
+                }
+            });
+        }
+    }
 };
 </script>
 <style lang='scss' scoped>
