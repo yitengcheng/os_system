@@ -13,9 +13,9 @@
         v-if="!item.childern"
         class="menuItem"
         :index="item.path"
-        v-show="(item.showFlag)"
+        v-show="item.showFlag"
       >{{item.title}}</el-menu-item>
-      <el-submenu v-else :index="index.toString()">
+      <el-submenu v-else :index="index.toString()" v-show="item.showFlag">
         <template slot="title">
           <span class="menuItem">{{item.title}}</span>
         </template>
@@ -31,6 +31,7 @@
               class="menuChildrenItem"
               v-for="(chirldItem,j) in object.childern"
               :key="j"
+              v-show="item.showFlag"
             >{{chirldItem.title}}</el-menu-item>
           </el-menu-item-group>
         </div>
@@ -57,25 +58,25 @@ export default {
                 {
                     path: '/audit',
                     title: '审批管理',
-                    showFlag: true,
-                    hasJudge: false
+                    showFlag: false,
+                    hasJudge: true
                 },
                 {
                     title: '系统管理',
-                    showFlag: true,
-                    hasJudge: false,
+                    showFlag: false,
+                    hasJudge: true,
                     childern: [
                         {
                             path: '/personnel',
                             title: '人员管理',
-                            showFlag: true,
-                            hasJudge: false
+                            showFlag: false,
+                            hasJudge: true
                         },
                         {
                             path: '/permissions',
                             title: '权限管理',
-                            showFlag: true,
-                            hasJudge: false
+                            showFlag: false,
+                            hasJudge: true
                         }
                     ]
                 },
@@ -106,49 +107,48 @@ export default {
                 },
                 {
                     title: '企业办公',
-                    showFlag: true,
-                    hasJudge: false,
+                    showFlag: false,
+                    hasJudge: true,
                     childern: [
                         {
                             path: '/fileRelease',
                             title: '文件发布',
-                            showFlag: true,
-                            hasJudge: false
+                            showFlag: false,
+                            hasJudge: true
                         },
                         {
                             path: '/informationIssue',
                             title: '信息发布',
-                            showFlag: true,
-                            hasJudge: false
+                            showFlag: false,
+                            hasJudge: true
                         },
                         {
                             path: '/officeSupplies',
                             title: '办公用品管理',
-                            showFlag: true,
-                            hasJudge: false
+                            showFlag: false,
+                            hasJudge: true
                         },
                         {
                             path: '/humanResources',
                             title: '人力资源管理',
-                            showFlag: true,
-                            hasJudge: false
+                            showFlag: false,
+                            hasJudge: true
                         },
                         {
                             path: '/conferenceRoom',
                             title: '会议室管理',
-                            showFlag: true,
-                            hasJudge: false
+                            showFlag: false,
+                            hasJudge: true
                         },
                         {
                             path: '/vehicleManagement',
                             title: '车辆管理',
-                            showFlag: true,
-                            hasJudge: false
+                            showFlag: false,
+                            hasJudge: true
                         }
                     ]
                 },
                 {
-                    path: '/',
                     title: '个人办公',
                     showFlag: true,
                     hasJudge: false,
@@ -188,15 +188,69 @@ export default {
         })
     },
     methods: {
-        refeshList (value) {
-            this.menuList.forEach(item => {
-                if (item.hasJudge) {
-                    let flag = this._.findIndex(value.permissions, o => {
-                        return o === 'watchImage';
-                    });
-                    item.showFlag = flag !== -1;
-                }
-            });
+        refeshList (user) {
+            if (user) {
+                this.menuList.forEach(item => {
+                    if (item.hasJudge) {
+                        if (item.title === '审批管理' && user.position.rank <= 3) {
+                            item.showFlag = true;
+                        } else if (item.title === '系统管理') {
+                            item.showFlag = this.$utils.hasPermission(user, [
+                                'admin',
+                                'personnel',
+                                'accessManager'
+                            ]);
+                        } else if (item.title === '人员管理') {
+                            item.showFlag = this.$utils.hasPermission(user, [
+                                'admin',
+                                'personnel'
+                            ]);
+                        } else if (item.title === '权限管理') {
+                            item.showFlag = this.$utils.hasPermission(user, [
+                                'admin',
+                                'accessManager'
+                            ]);
+                        } else if (item.title === '企业办公') {
+                            item.showFlag = this.$utils.hasPermission(user, [
+                                'admin',
+                                'filesUpload',
+                                'information',
+                                'officeSupplies',
+                                'HRM',
+                                'conferenceRoom',
+                                'carManagement'
+                            ]);
+                        } else if (item.title === '文件发布') {
+                            item.showFlag = this.$utils.hasPermission(user, [
+                                'admin',
+                                'filesUpload'
+                            ]);
+                        } else if (item.title === '信息发布') {
+                            item.showFlag = this.$utils.hasPermission(user, [
+                                'admin',
+                                'information'
+                            ]);
+                        } else if (item.title === '办公用品管理') {
+                            item.showFlag = this.$utils.hasPermission(user, [
+                                'admin',
+                                'officeSupplies'
+                            ]);
+                        } else if (item.title === '人力资源管理') {
+                            item.showFlag = this.$utils.hasPermission(user, ['admin', 'HRM']);
+                        } else if (item.title === '会议室管理') {
+                            item.showFlag = this.$utils.hasPermission(user, [
+                                'admin',
+                                'conferenceRoom'
+                            ]);
+                        } else if (item.title === '车辆管理') {
+                            item.showFlag = this.$utils.hasPermission(user, [
+                                'admin',
+                                'carManagement'
+                            ]);
+                        }
+                    }
+                });
+            }
         }
     },
     mounted () {
