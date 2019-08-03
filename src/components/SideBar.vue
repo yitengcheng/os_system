@@ -189,68 +189,70 @@ export default {
     },
     methods: {
         refeshList (user) {
-            if (user) {
-                this.menuList.forEach(item => {
-                    if (item.hasJudge) {
-                        if (item.title === '审批管理' && user.position.rank <= 3) {
+            this.menuList.forEach(item => {
+                if (item.hasJudge) {
+                    if (item.title === '审批管理') {
+                        if (user && user.position.rank <= 3) {
                             item.showFlag = true;
-                        } else if (item.title === '系统管理') {
-                            item.showFlag = this.$utils.hasPermission(user, [
-                                'admin',
-                                'personnel',
-                                'accessManager'
-                            ]);
-                        } else if (item.title === '人员管理') {
-                            item.showFlag = this.$utils.hasPermission(user, [
-                                'admin',
-                                'personnel'
-                            ]);
-                        } else if (item.title === '权限管理') {
-                            item.showFlag = this.$utils.hasPermission(user, [
-                                'admin',
-                                'accessManager'
-                            ]);
-                        } else if (item.title === '企业办公') {
-                            item.showFlag = this.$utils.hasPermission(user, [
-                                'admin',
-                                'filesUpload',
-                                'information',
-                                'officeSupplies',
-                                'HRM',
-                                'conferenceRoom',
-                                'carManagement'
-                            ]);
-                        } else if (item.title === '文件发布') {
-                            item.showFlag = this.$utils.hasPermission(user, [
-                                'admin',
-                                'filesUpload'
-                            ]);
-                        } else if (item.title === '信息发布') {
-                            item.showFlag = this.$utils.hasPermission(user, [
-                                'admin',
-                                'information'
-                            ]);
-                        } else if (item.title === '办公用品管理') {
-                            item.showFlag = this.$utils.hasPermission(user, [
-                                'admin',
-                                'officeSupplies'
-                            ]);
-                        } else if (item.title === '人力资源管理') {
-                            item.showFlag = this.$utils.hasPermission(user, ['admin', 'HRM']);
-                        } else if (item.title === '会议室管理') {
-                            item.showFlag = this.$utils.hasPermission(user, [
-                                'admin',
-                                'conferenceRoom'
-                            ]);
-                        } else if (item.title === '车辆管理') {
-                            item.showFlag = this.$utils.hasPermission(user, [
-                                'admin',
-                                'carManagement'
-                            ]);
+                        } else {
+                            item.showFlag = false;
                         }
+                    } else if (item.title === '系统管理') {
+                        item.showFlag = this.$utils.hasPermission(user, [
+                            'admin',
+                            'personnel',
+                            'accessManager'
+                        ]);
+                    } else if (item.title === '人员管理') {
+                        item.showFlag = this.$utils.hasPermission(user, [
+                            'admin',
+                            'personnel'
+                        ]);
+                    } else if (item.title === '权限管理') {
+                        item.showFlag = this.$utils.hasPermission(user, [
+                            'admin',
+                            'accessManager'
+                        ]);
+                    } else if (item.title === '企业办公') {
+                        item.showFlag = this.$utils.hasPermission(user, [
+                            'admin',
+                            'filesUpload',
+                            'information',
+                            'officeSupplies',
+                            'HRM',
+                            'conferenceRoom',
+                            'carManagement'
+                        ]);
+                    } else if (item.title === '文件发布') {
+                        item.showFlag = this.$utils.hasPermission(user, [
+                            'admin',
+                            'filesUpload'
+                        ]);
+                    } else if (item.title === '信息发布') {
+                        item.showFlag = this.$utils.hasPermission(user, [
+                            'admin',
+                            'information'
+                        ]);
+                    } else if (item.title === '办公用品管理') {
+                        item.showFlag = this.$utils.hasPermission(user, [
+                            'admin',
+                            'officeSupplies'
+                        ]);
+                    } else if (item.title === '人力资源管理') {
+                        item.showFlag = this.$utils.hasPermission(user, ['admin', 'HRM']);
+                    } else if (item.title === '会议室管理') {
+                        item.showFlag = this.$utils.hasPermission(user, [
+                            'admin',
+                            'conferenceRoom'
+                        ]);
+                    } else if (item.title === '车辆管理') {
+                        item.showFlag = this.$utils.hasPermission(user, [
+                            'admin',
+                            'carManagement'
+                        ]);
                     }
-                });
-            }
+                }
+            });
         }
     },
     mounted () {
