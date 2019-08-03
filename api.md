@@ -142,6 +142,18 @@
             ]
         })
 
+8. modifyPermissions(post) 修改权限
+    参数：permissions, userId, targetUserId
+    返回：res.json({
+            success: true
+        })
+
+9. modifyPassword(post) 修改登录密码
+    参数：newPassword, oldPassword, userId
+    返回：res.json({
+            success: true
+        })
+
 # 公司发文
 1. getProfiles(post) 获取公司发文列表
     参数：pageNo, pageSize
