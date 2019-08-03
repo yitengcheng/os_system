@@ -9,7 +9,11 @@
         :tableData="addressBookList"
         :tableKey="tableKey"
         :border="true"
-      ></ElTable>
+      >
+        <div slot-scope="data">
+          <el-button @click.native.prevent="deleteRow(data.data.row.addressBookId)" size="small">删除</el-button>
+        </div>
+      </ElTable>
     </div>
     <showModel
       title="添加联系人"
@@ -114,11 +118,12 @@ export default {
                 company: [{ required: false, message: '请填写公司名', trigger: 'blur' }]
             },
             tableKey: [
-                { prop: 'name', label: '姓名', width: '200' },
+                { prop: 'name', label: '姓名', width: '150' },
                 { prop: 'phone', label: '手机号码', width: '200' },
                 { prop: 'company', label: '公司', width: '200' },
                 { prop: 'createTime', label: '添加时间', width: '200' },
-                { prop: 'remark', label: '备注', width: '200' }
+                { prop: 'remark', label: '备注', width: '150' },
+                { label: '操作', width: '100' }
             ]
         };
     },
@@ -132,15 +137,7 @@ export default {
                 .then(res => {
                     let { success, msg, addressBookList } = res;
                     if (success) {
-                        addressBookList.forEach(item => {
-                            this.addressBookList.push({
-                                name: item.name,
-                                phone: item.phone,
-                                company: item.company || '无',
-                                createTime: item.createTime,
-                                remark: item.remark || '无'
-                            });
-                        });
+                        this.addressBookList = addressBookList;
                     } else {
                         this.$alert(msg);
                     }
@@ -162,11 +159,10 @@ export default {
                         .then(res => {
                             let { success, msg } = res;
                             if (success) {
+                                this.$refs.addressBook.resetFields();
                                 this.$alert('添加成功');
                                 this.getAddressBook();
                                 this.ModelVisible = false;
-                                this.getAddressBook();
-                                this.$refs.addressBook.resetFields();
                             } else {
                                 this.$alert(msg);
                             }
@@ -176,7 +172,22 @@ export default {
                 }
             });
         },
-
+        deleteRow (addressBookId) {
+            this.$http
+                .post('/api/removeAddressBook', {
+                    userId: this.user._id,
+                    addressBookId
+                })
+                .then(res => {
+                    let { success, msg } = res;
+                    if (success) {
+                        this.$alert('删除成功');
+                        this.getAddressBook();
+                    } else {
+                        this.$alert(msg);
+                    }
+                });
+        },
         add () {
             this.ModelVisible = true;
         }
