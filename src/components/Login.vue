@@ -8,7 +8,7 @@
     >登录</el-button>
     <div class="user" v-else>
       <div class="user">
-        <div class="userName">{{user.name}}</div>
+        <el-button type="text" @click="changePwd" class="userName">{{user.name}}</el-button>
       </div>
       <el-button
         @click="logoutVisible = true"
@@ -53,6 +53,48 @@
       </div>
     </showModel>
     <showModel
+      title="修改密码"
+      :dialogVisible="showChangePassWord"
+      @close="closeModel(true)"
+      @doCancel="closeModel(true)"
+      @doConfirm="changePassWord"
+    >
+      <div slot="content">
+        <el-form
+          :model="formpassword"
+          ref="formpassword"
+          class="formpassword"
+          :rules="pwdRules"
+          @onChange="onChange"
+        >
+          <FormInput
+            label="旧密码"
+            type="password"
+            :form="formpassword"
+            value="oldPassword"
+            maxlength="20"
+            @onChange="onChange"
+          />
+          <FormInput
+            label="新密码"
+            type="password"
+            :form="formpassword"
+            value="newPassword"
+            maxlength="20"
+            @onChange="onChange"
+          />
+          <FormInput
+            label="重复新密码"
+            type="password"
+            :form="formpassword"
+            value="continuePassword"
+            maxlength="20"
+            @onChange="onChange"
+          />
+        </el-form>
+      </div>
+    </showModel>
+    <showModel
       title=" "
       :dialogVisible="messageVisible"
       @close="closeModel(true)"
@@ -75,14 +117,32 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex';
+import FormInput from '../components/form/formInput';
 import showModel from './showModel';
 export default {
-    components: { showModel },
+    components: { showModel, FormInput },
     data () {
         return {
             messageVisible: false,
+            showChangePassWord: false,
             modelVisible: false,
             logoutVisible: false,
+            formpassword: {
+                oldPassword: '',
+                newPassword: '',
+                continuePassword: ''
+            },
+            pwdRules: {
+                oldPassword: [
+                    { required: true, message: '请输旧密码', trigger: 'blur' }
+                ],
+                newPassword: [
+                    { required: true, message: '请输新密码', trigger: 'blur' }
+                ],
+                continuePassword: [
+                    { required: true, message: '请再次输入新密码', trigger: 'blur' }
+                ]
+            },
             userInfo: {
                 name: '',
                 password: ''
@@ -119,7 +179,17 @@ export default {
             this.logoutVisible = false;
             this.modifyVisible = false;
             this.messageVisible = false;
+            this.showChangePassWord = false;
             this.$refs.login && this.$refs.login.resetFields();
+        },
+        onChange (value, formType) {
+            this.formpassword[formType] = value;
+        },
+        changePwd () {
+            this.showChangePassWord = true;
+        },
+        changePassWord () {
+            console.log('321321');
         },
         onChangeName () {
             this.name = this.userInfo.name;

@@ -179,11 +179,11 @@
             success: true,
             fileList: [
                 {
-                    title: String,
-                    desc: String,
-                    filePath: Array,
-                    author: String,
-                    profileId: String
+                    title: String,          // 标题
+                    desc: String,           // 内容
+                    filePath: Array,        // 附件路径
+                    author: String,         // 作者
+                    profileId: String       // 文件编号
                 }
             ]
         })
