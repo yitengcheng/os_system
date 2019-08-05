@@ -2,7 +2,6 @@
   <div class="contain">
     <PageTitle label="日程安排" />
     <el-calendar class="item">
-      <!-- 这里使用的是 2.5 slot 语法，对于新项目请使用 2.6 slot 语法-->
       <template slot="dateCell" slot-scope="{date, data}">
         <el-button
           type="text"

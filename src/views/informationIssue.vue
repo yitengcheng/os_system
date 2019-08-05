@@ -9,7 +9,7 @@
       label-position="right"
       :rules="rules"
     >
-      <FormInput label="标题" :form="form" value="title" @onChange="onChange" />
+      <FormInput label="标题" :form="form" value="title" @onChange="onChange" maxlength="10" />
       <FormInput
         type="textarea"
         maxlength="200"

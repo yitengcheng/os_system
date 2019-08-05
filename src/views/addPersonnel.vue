@@ -9,7 +9,7 @@
       label-position="right"
       :rules="rules"
     >
-      <FormInput label="姓名" :form="form" value="name" @onChange="onChange" />
+      <FormInput label="姓名" :form="form" value="name" @onChange="onChange" maxlength="5" />
       <FormSelect
         :options="branchList"
         label="部门"
@@ -25,9 +25,9 @@
         @onChange="onChange"
       />
       <FormInput label="电话" :form="form" value="phone" @onChange="onChange" maxlength="11" />
-      <FormInput label="电子邮箱" :form="form" value="email" @onChange="onChange" />
-      <FormInput label="登录系统用户名" :form="form" value="userName" @onChange="onChange" />
-      <FormInput label="登录系统密码" :form="form" value="password" @onChange="onChange" />
+      <FormInput label="电子邮箱" :form="form" value="email" @onChange="onChange" maxlength="30" />
+      <FormInput label="登录系统用户名" :form="form" value="userName" @onChange="onChange" maxlength="15" />
+      <FormInput label="登录系统密码" :form="form" value="password" @onChange="onChange" maxlength="20" />
       <FormRadio :checks="['男','女']" label="性别" :form="form" value="sex" @onChange="onChange" />
       <FormRadio
         :checks="['高中','中专','大专','本科','硕士','博士']"

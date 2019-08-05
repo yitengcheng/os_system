@@ -9,7 +9,7 @@
       label-width="110px"
       label-position="right"
     >
-      <FormInput label="标题" :form="form" value="title" @onChange="onChange" />
+      <FormInput label="标题" :form="form" value="title" @onChange="onChange" maxlength="10" />
       <FormSelect
         :options="branchList"
         label="抄送至"
