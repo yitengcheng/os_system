@@ -16,18 +16,19 @@
     </div>
     <showModel
       title="权限"
-      :dialogVisible="ModelVisible"
-      @close="closeModel(true)"
-      @doCancel="closeModel(true)"
+      :dialogVisible="modelVisible"
+      @close="closeModel"
+      @doCancel="closeModel"
       @doConfirm="doConfirm"
     >
       <div slot="content">
-        <el-form class="formContain" :model="persons.permissionList" ref="persons">
+        <el-form class="formContain" :model="person" ref="person" :rules="rules">
           <FormSelect
-            :options="persons.permissionList"
+            :options="permissionsList"
             label="权限"
-            :form="persons.permissionList"
-            value="position"
+            :form="person"
+            value="permissions"
+            :multiple="true"
             @onChange="onChange"
           />
         </el-form>
@@ -44,30 +45,21 @@ import showModel from '../components/showModel';
 import { mapState } from 'vuex';
 const map = {
     admin: '管理员',
-    accessManager: 'accessManager',
+    accessManager: '权限分配者',
     personnel: '人员管理的权限',
-    authority: '权限管理',
     filesUpload: '文件发布的权限',
-    information: 'information',
+    information: '信息发布的权限',
     officeSupplies: '办公用品管理的权限',
     HRM: '人力资源管理的权限',
     conferenceRoom: '会议室管理的权限',
-    carManagement: 'carManagement'
+    carManagement: '车辆管理的权限'
 };
 export default {
     components: { PageTitle, ElTable, showModel, FormSelect },
     data () {
         return {
-            ModelVisible: false,
-            persons: [
-                {
-                    name: '范泽华',
-                    branch: '电子商务',
-                    position: '四级',
-                    _id: '4231423214',
-                    permissionList: { label: Map['admin'], value: 'dsfsdfds' }
-                }
-            ],
+            modelVisible: false,
+            persons: [],
             noSelf: true,
             tableKey: [
                 { prop: 'name', label: '姓名', width: '150' },
@@ -75,11 +67,22 @@ export default {
                 { prop: 'position', label: '职位', width: '150' },
                 { prop: 'permissions', label: '权限', width: '500' },
                 { label: '操作', width: '150' }
-            ]
+            ],
+            person: {
+                permissions: []
+            },
+            permissionsList: [],
+            rules: {
+                permissions: [
+                    { required: true, message: '请选择此用户权限', trigger: 'blur' }
+                ]
+            },
+            targetUser: {}
         };
     },
     mounted () {
-    // this.getPersons();
+        this.getPersons();
+        this.getPermissions();
     },
     computed: {
         ...mapState({
@@ -88,25 +91,45 @@ export default {
     },
     methods: {
         closeModel () {
-            this.ModelVisible = false;
+            this.modelVisible = false;
+            this.$refs.person && this.$refs.person.resetFields();
         },
         onChange (value, formType) {
-            this.persons[formType] = value;
+            this.person[formType] = value;
         },
-        doConfirm () {},
+        doConfirm () {
+            this.$refs.person.validate(vaild => {
+                if (vaild) {
+                    this.$http
+                        .post('/api/modifyPermissions', {
+                            userId: this.user._id,
+                            targetUserId: this.targetUser.userId,
+                            permissions: this.person.permissions
+                        })
+                        .then(res => {
+                            let { success, msg } = res;
+                            this.$alert(success ? '修改成功' : msg);
+                            this.getPersons();
+                            this.closeModel();
+                        });
+                } else {
+                    this.$alert('请认真核对信息');
+                }
+            });
+        },
         getPersons () {
+            this.persons = [];
             this.$http.post('/api/getPersons').then(res => {
                 let { success, msg, persons } = res;
                 if (success) {
                     let tmp = {};
                     let a = [];
-                    this.user._id = this.user._id;
                     persons.forEach(item => {
                         if (item._id !== this.user._id) {
                             tmp.name = item.name;
                             tmp.branch = item.branch.name;
                             tmp.position = item.position.position;
-                            tmp._id = item._id;
+                            tmp.userId = item._id;
                             tmp.permissionList = item.permissions;
                             item.permissions.forEach(element => {
                                 a.push(map[element]);
@@ -122,9 +145,19 @@ export default {
                 }
             });
         },
+        getPermissions () {
+            this.$http.post('/api/getPermissions').then(res => {
+                let { success, msg, permissions } = res;
+                if (success) {
+                    this.permissionsList = permissions;
+                } else {
+                    this.$alert(msg);
+                }
+            });
+        },
         edit (data) {
-            console.log('-=-=', data);
-            this.ModelVisible = true;
+            this.modelVisible = true;
+            this.targetUser = data;
         }
     }
 };

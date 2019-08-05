@@ -84,7 +84,6 @@ export default {
     methods: {
         onChange (value, formType) {
             this.form[formType] = value;
-            console.log(this.form);
         },
         getBranch () {
             this.$http.post('/api/getBranchs').then(res => {

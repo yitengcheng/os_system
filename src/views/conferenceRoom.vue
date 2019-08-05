@@ -86,6 +86,7 @@ import ElTable from '../components/elComponent/el-table';
 import showModel from '../components/showModel';
 import FormInput from '../components/form/formInput';
 import FormDateTime from '../components/form/formDateTime';
+import { mapState } from 'vuex';
 export default {
     components: { PageTitle, ElTable, showModel, FormInput, FormDateTime },
     data () {
@@ -158,30 +159,37 @@ export default {
             }
         };
     },
+    computed: {
+        ...mapState({
+            user: state => state.user.user
+        })
+    },
     mounted () {
         this.getConferenceRooms();
     },
     methods: {
         getConferenceRooms () {
             this.tableData = [];
-            this.$http.post('/api/getConferenceRooms').then(res => {
-                let { success, msg, conferenceRoomList } = res;
-                if (success) {
-                    conferenceRoomList.forEach(item => {
-                        this.tableData.push({
-                            name: item.name,
-                            area: item.area,
-                            roomNumber: item.roomNumber,
-                            galleryful: item.galleryful,
-                            roomStatus: item.roomStatus === '1' ? '空闲' : '已有预约',
-                            appointmentTime: item.appointmentTime,
-                            roomId: item._id
+            this.$http
+                .post('/api/getConferenceRooms', { userId: this.user._id })
+                .then(res => {
+                    let { success, msg, conferenceRoomList } = res;
+                    if (success) {
+                        conferenceRoomList.forEach(item => {
+                            this.tableData.push({
+                                name: item.name,
+                                area: item.area,
+                                roomNumber: item.roomNumber,
+                                galleryful: item.galleryful,
+                                roomStatus: item.roomStatus === '1' ? '空闲' : '已有预约',
+                                appointmentTime: item.appointmentTime,
+                                roomId: item._id
+                            });
                         });
-                    });
-                } else {
-                    this.$alert(msg);
-                }
-            });
+                    } else {
+                        this.$alert(msg);
+                    }
+                });
         },
         onChange (value, formType) {
             this.conferenceRoom[formType] = value;
@@ -205,7 +213,8 @@ export default {
                         : '/api/addConferenceRoom';
                     this.$http
                         .post(url, {
-                            room: this.conferenceRoom
+                            room: this.conferenceRoom,
+                            userId: this.user._id
                         })
                         .then(res => {
                             let { msg, success } = res;
@@ -232,6 +241,7 @@ export default {
                 if (valid) {
                     this.$http
                         .post('/api/subscribeConferenceRoom', {
+                            userId: this.user._id,
                             roomId: this.room.roomId,
                             ...this.subscribe
                         })
@@ -258,15 +268,17 @@ export default {
                 type: 'warning'
             })
                 .then(() => {
-                    this.$http.post('/api/confirmAfterUse', { ...room }).then(res => {
-                        let { success, msg } = res;
-                        if (success) {
-                            this.closeModel();
-                            this.getConferenceRooms();
-                        } else {
-                            this.$alert(msg);
-                        }
-                    });
+                    this.$http
+                        .post('/api/confirmAfterUse', { userId: this.user._id, ...room })
+                        .then(res => {
+                            let { success, msg } = res;
+                            if (success) {
+                                this.closeModel();
+                                this.getConferenceRooms();
+                            } else {
+                                this.$alert(msg);
+                            }
+                        });
                 })
                 .catch(() => {});
         }

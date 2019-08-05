@@ -275,6 +275,7 @@ export default {
                         .then(res => {
                             let { success, msg } = res;
                             this.$alert(success ? '上传成功' : msg);
+                            this.$refs.attendance && this.$refs.attendance.resetFields();
                         });
                 } else {
                     this.$alert('请注意核对信息');

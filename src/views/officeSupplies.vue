@@ -119,7 +119,7 @@ import FormInput from '../components/form/formInput';
 import Tabs from '../components/Tabs';
 import showModel from '../components/showModel';
 import FormSelect from '../components/form/formSelect';
-
+import { mapState } from 'vuex';
 export default {
     components: {
         PageTitle,
@@ -205,7 +205,11 @@ export default {
             ]
         };
     },
-    computed: {},
+    computed: {
+        ...mapState({
+            user: state => state.user.user
+        })
+    },
     mounted () {
         this.getStationery();
         this.getBranchs();
@@ -257,7 +261,8 @@ export default {
                     pageNo: 0,
                     pageSize: 20,
                     category: this.category,
-                    name: this.name
+                    name: this.name,
+                    userId: this.user._id
                 })
                 .then(res => {
                     let { success, msg, stationeryList } = res;
@@ -274,7 +279,8 @@ export default {
                     pageNo: 0,
                     pageSize: 20,
                     category: this.category,
-                    name: this.name
+                    name: this.name,
+                    userId: this.user._id
                 })
                 .then(res => {
                     let { success, msg, recordList } = res;
@@ -285,13 +291,13 @@ export default {
                     }
                 });
         },
-        addStationeryRecord () {},
         doConfirm () {
             this.$refs.form.validate(valid => {
                 if (valid) {
                     this.$http
                         .post('/api/addStationery', {
-                            stationery: this.form
+                            stationery: this.form,
+                            userId: this.user._id
                         })
                         .then(res => {
                             let { success, msg } = res;
@@ -318,7 +324,8 @@ export default {
                         stationeryId: this.outForm.stationeryId,
                         receiveNumber: this.outForm.receiveNumber,
                         receiverId: this.outForm.receiverId,
-                        remark: this.outForm.remark
+                        remark: this.outForm.remark,
+                        userId: this.user._id
                     })
                     .then(res => {
                         let { success, msg } = res;

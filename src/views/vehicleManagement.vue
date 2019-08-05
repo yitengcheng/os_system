@@ -142,6 +142,7 @@ import showModel from '../components/showModel';
 import FormInput from '../components/form/formInput';
 import FormSelect from '../components/form/formSelect';
 import FormDateTime from '../components/form/formDateTime';
+import { mapState } from 'vuex';
 export default {
     components: {
         PageTitle,
@@ -275,6 +276,11 @@ export default {
             }
         };
     },
+    computed: {
+        ...mapState({
+            user: state => state.user.user
+        })
+    },
     mounted () {
         this.getCarRecord();
         this.getCar();
@@ -282,7 +288,7 @@ export default {
     },
     methods: {
         getCar () {
-            this.$http.post('/api/getCars').then(res => {
+            this.$http.post('/api/getCars', { userId: this.user._id }).then(res => {
                 let { success, carList } = res;
                 if (success) {
                     carList.forEach(item => {
@@ -320,27 +326,29 @@ export default {
         },
         getCarRecord () {
             this.tableData = [];
-            this.$http.post('/api/getCarRecord').then(res => {
-                let { success, msg, carRecordList } = res;
-                if (success) {
-                    carRecordList.forEach(item => {
-                        this.tableData.push({
-                            carOwner: item.carOwner,
-                            plate: item.plate,
-                            carModel: item.carModel,
-                            application: item.application,
-                            startingKm: item.startingKm || 0,
-                            endingKm: item.endingKm || 0,
-                            mileage: item.mileage || 0,
-                            status: item.status === '1' ? '未完成' : '完成',
-                            serviceTime: item.serviceTime,
-                            recordId: item.recordId
+            this.$http
+                .post('/api/getCarRecord', { userId: this.user._id })
+                .then(res => {
+                    let { success, msg, carRecordList } = res;
+                    if (success) {
+                        carRecordList.forEach(item => {
+                            this.tableData.push({
+                                carOwner: item.carOwner,
+                                plate: item.plate,
+                                carModel: item.carModel,
+                                application: item.application,
+                                startingKm: item.startingKm || 0,
+                                endingKm: item.endingKm || 0,
+                                mileage: item.mileage || 0,
+                                status: item.status === '1' ? '未完成' : '完成',
+                                serviceTime: item.serviceTime,
+                                recordId: item.recordId
+                            });
                         });
-                    });
-                } else {
-                    this.$alert(msg);
-                }
-            });
+                    } else {
+                        this.$alert(msg);
+                    }
+                });
         },
         onChangeCarinfo (value, formType) {
             this.carInfo[formType] = value;
@@ -369,6 +377,7 @@ export default {
                 if (valid) {
                     this.$http
                         .post('/api/addCar', {
+                            userId: this.user._id,
                             car: this.carInfo
                         })
                         .then(res => {
@@ -389,7 +398,10 @@ export default {
             this.$refs.subscribeCarInfo.validate(valid => {
                 if (valid) {
                     this.$http
-                        .post('/api/bookingOfVehicles', { ...this.subscribeCarInfo })
+                        .post('/api/bookingOfVehicles', {
+                            userId: this.user._id,
+                            ...this.subscribeCarInfo
+                        })
                         .then(res => {
                             let { msg, success } = res;
                             if (success) {
@@ -409,6 +421,7 @@ export default {
                 if (valid) {
                     this.$http
                         .post('/api/confirmMileage', {
+                            userId: this.user._id,
                             recordId: this.targetRecord.recordId,
                             ...this.mileageInfo
                         })

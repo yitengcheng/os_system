@@ -65,7 +65,6 @@ export default {
     watch: {
         temp: {
             handler (newvalue, oldvalue) {
-                console.log(newvalue, oldvalue);
                 if (newvalue) {
                     this.start();
                 }
