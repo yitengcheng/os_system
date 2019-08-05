@@ -95,7 +95,7 @@
       </div>
     </showModel>
     <showModel
-      title=" "
+      title="信息公告"
       :dialogVisible="messageVisible"
       @close="closeModel(true)"
       @doConfirm="closeModel(true)"

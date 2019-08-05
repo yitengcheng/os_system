@@ -38,7 +38,6 @@ export default {
                 { prop: 'title', label: '标题', width: '200' },
                 { prop: 'desc', label: '描述', width: '400' },
                 { label: '文件下载', width: '300' }
-                // { label: '操作', width: '100' }
             ]
         };
     },
