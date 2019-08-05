@@ -122,6 +122,15 @@ import showModel from './showModel';
 export default {
     components: { showModel, FormInput },
     data () {
+        let validatorPassword = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请输入再次输入新密码'));
+            } else if (this.formpassword.newPassword !== value) {
+                callback(new Error('你两次输入的新密码不一致'));
+            } else {
+                callback();
+            }
+        };
         return {
             messageVisible: false,
             showChangePassWord: false,
@@ -140,7 +149,7 @@ export default {
                     { required: true, message: '请输新密码', trigger: 'blur' }
                 ],
                 continuePassword: [
-                    { required: true, message: '请再次输入新密码', trigger: 'blur' }
+                    { required: true, validator: validatorPassword, trigger: 'blur' }
                 ]
             },
             userInfo: {
@@ -181,6 +190,7 @@ export default {
             this.messageVisible = false;
             this.showChangePassWord = false;
             this.$refs.login && this.$refs.login.resetFields();
+            this.$refs.formpassword && this.$refs.formpassword.resetFields();
         },
         onChange (value, formType) {
             this.formpassword[formType] = value;
@@ -189,7 +199,37 @@ export default {
             this.showChangePassWord = true;
         },
         changePassWord () {
-            console.log('321321');
+            this.$refs.formpassword.validate(valid => {
+                if (valid) {
+                    this.$http
+                        .post('/api/modifyPassword', {
+                            userId: this.user._id,
+                            newPassword: this.formpassword.newPassword,
+                            oldPassword: this.formpassword.oldPassword
+                        })
+                        .then(res => {
+                            let { success, msg } = res;
+                            if (success) {
+                                this.$alert('修改成功，请重新登录');
+                                this.updateUser('');
+                                this.closeModel();
+                                this.userInfo = {
+                                    name: '',
+                                    password: ''
+                                };
+                                this.name = '';
+                                this.password = '';
+                                this.$router.replace({
+                                    path: '/'
+                                });
+                            } else {
+                                this.$alert(msg);
+                            }
+                        });
+                } else {
+                    this.$alert('请认真核对信息');
+                }
+            });
         },
         onChangeName () {
             this.name = this.userInfo.name;
