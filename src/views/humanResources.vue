@@ -1,22 +1,23 @@
 <template>
   <div class="contain">
     <PageTitle label="人力资源管理" />
+    <el-button type="primary" class="uploadBtn" @click="showModel('uploadFlag')">上传考勤记录</el-button>
     <ElTable class="table" :stripe="true" :border="true" :tableKey="labels" :tableData="tableData">
       <div slot-scope="data">
         <el-button
-          @click.native.prevent="showAdjust(data.data.$index, data.data.row)"
+          @click.native.prevent="showModel('adjustFlag',data.data.row)"
           type="text"
           size="small"
         >岗位调整</el-button>
         <el-button
           v-if="data.data.row.workStatus === '在职'"
-          @click.native.prevent="applyForLeave(data.data.$index, data.data.row)"
+          @click.native.prevent="applyForLeave(data.data.row)"
           type="text"
           size="small"
         >申请离职</el-button>
         <el-button
           v-if="data.data.row.workStatus === '离职中'"
-          @click.native.prevent="confirmLeave(data.data.$index, data.data.row)"
+          @click.native.prevent="confirmLeave(data.data.row)"
           type="text"
           size="small"
         >确认离职</el-button>
@@ -30,7 +31,7 @@
       @doConfirm="adjustPosition"
     >
       <div slot="content">
-        <el-form :model="adjust" ref="adjust" class="adjustContain" :rules="rules">
+        <el-form :model="adjust" ref="adjust" class="modelContain" :rules="rules">
           <FormSelect
             :options="branchList"
             label="部门"
@@ -48,6 +49,35 @@
         </el-form>
       </div>
     </showModel>
+    <showModel
+      title="上传考勤记录"
+      :dialogVisible="uploadFlag"
+      @close="closeModel"
+      @doCancel="closeModel"
+      @doConfirm="uploadAttendance"
+    >
+      <div slot="content">
+        <el-form :model="attendance" ref="attendance" class="modelContain" :rules="attendanceRules">
+          <FormDateTime
+            :options="[]"
+            label="月份"
+            :form="attendance"
+            value="date"
+            type="month"
+            @onChange="onChangeAttendance"
+          />
+          <FormUpload
+            label="考勤"
+            value="file"
+            :form="attendance"
+            accept=".xlsx, .xls"
+            listType="text"
+            limit="1"
+            @onChange="onChangeAttendance"
+          />
+        </el-form>
+      </div>
+    </showModel>
   </div>
 </template>
 
@@ -56,8 +86,18 @@ import PageTitle from '../components/PageTitle';
 import ElTable from '../components/elComponent/el-table';
 import showModel from '../components/showModel';
 import FormSelect from '../components/form/formSelect';
+import FormDateTime from '../components/form/formDateTime';
+import FormUpload from '../components/form/formUpload';
+import { mapState } from 'vuex';
 export default {
-    components: { PageTitle, ElTable, showModel, FormSelect },
+    components: {
+        PageTitle,
+        ElTable,
+        showModel,
+        FormSelect,
+        FormDateTime,
+        FormUpload
+    },
     data () {
         return {
             labels: [
@@ -98,14 +138,23 @@ export default {
             ],
             tableData: [],
             adjustFlag: false,
+            uploadFlag: false,
             targetUser: {},
             adjust: {
                 branchId: '',
                 positionId: ''
             },
+            attendance: {
+                date: '',
+                file: []
+            },
             rules: {
                 branchId: [{ required: true, message: '请选择部门', trigger: 'blur' }],
                 positionId: [{ required: true, message: '请选择级别', trigger: 'blur' }]
+            },
+            attendanceRules: {
+                date: [{ required: true, message: '请选择考勤月份', trigger: 'blur' }],
+                file: [{ required: true, message: '请上传文件', trigger: 'blur' }]
             },
             branchList: [],
             positionList: []
@@ -115,6 +164,11 @@ export default {
         this.getPerson();
         this.getBranchs();
         this.getPositions();
+    },
+    computed: {
+        ...mapState({
+            user: state => state.user.user
+        })
     },
     methods: {
         getBranchs () {
@@ -140,6 +194,9 @@ export default {
         onChange (value, formType) {
             this.adjust[formType] = value;
         },
+        onChangeAttendance (value, formType) {
+            this.attendance[formType] = value;
+        },
         getPerson () {
             this.$http.post('/api/getPersons').then(res => {
                 let { success, msg, persons } = res;
@@ -163,10 +220,11 @@ export default {
         },
         closeModel () {
             this.adjustFlag = false;
+            this.uploadFlag = false;
         },
-        showAdjust (index, user) {
-            this.targetUser = user;
-            this.adjustFlag = true;
+        showModel (flag, user) {
+            this.targetUser = user || {};
+            this[flag] = true;
         },
         adjustPosition () {
             this.$refs.adjust.validate(valid => {
@@ -193,16 +251,34 @@ export default {
                 }
             });
         },
-        applyForLeave (index, user) {
+        applyForLeave (user) {
             this.$http.post('/api/applyForLeave', { targetId: user.id }).then(res => {
                 let { msg, success } = res;
                 success ? this.getPerson() : this.$alert(msg);
             });
         },
-        confirmLeave (index, user) {
+        confirmLeave (user) {
             this.$http.post('/api/confirmLeave', { targetId: user.id }).then(res => {
                 let { msg, success } = res;
                 success ? this.getPerson() : this.$alert(msg);
+            });
+        },
+        uploadAttendance () {
+            this.$refs.attendance.validate(valid => {
+                if (valid) {
+                    this.$http
+                        .post('/api/uploadAttendance', {
+                            userId: this.user._id,
+                            date: this.attendance.date,
+                            file: this.attendance.file[0]
+                        })
+                        .then(res => {
+                            let { success, msg } = res;
+                            this.$alert(success ? '上传成功' : msg);
+                        });
+                } else {
+                    this.$alert('请注意核对信息');
+                }
             });
         }
     }
@@ -220,9 +296,16 @@ export default {
   display: flex;
   align-self: center;
 }
-.adjustContain {
+.modelContain {
   display: flex;
-  align-items: center;
   flex-direction: column;
+}
+.uploadBtn {
+  display: flex;
+  width: 105px;
+  height: 35px;
+  align-self: flex-end;
+  margin-right: 130px;
+  margin-bottom: 20px;
 }
 </style>
