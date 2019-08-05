@@ -5,6 +5,7 @@ import Audit from './../views/audit';
 // 系统管理
 import Personnel from './../views/personnel.vue';
 import AddPersonnel from './../views/addPersonnel.vue';
+import Permissions from './../views/permissions.vue';
 // 公共资源
 import PublicAddressBook from './../views/publicAddressBook';
 import MessageBoard from './../views/messageBoard';
@@ -118,6 +119,11 @@ export default new Router({
             path: '/audit',
             name: 'audit',
             component: Audit
+        },
+        {
+            path: '/permissions',
+            name: 'permissions',
+            component: Permissions
         }
     ]
 });
