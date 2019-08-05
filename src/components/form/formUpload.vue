@@ -9,6 +9,7 @@
       :on-remove="remove"
       :accept="accept"
       :before-upload="before"
+      :limit="limit*1"
       multiple
     >
       <i v-if="listType !== 'text'" class="el-icon-plus"></i>
@@ -21,7 +22,7 @@
 <script>
 export default {
     name: 'upload',
-    props: ['value', 'label', 'listType', 'accept', 'form'],
+    props: ['value', 'label', 'listType', 'accept', 'form', 'limit'],
     data () {
         return {
             dialogVisible: false,
