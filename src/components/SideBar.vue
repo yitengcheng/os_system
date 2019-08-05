@@ -154,6 +154,12 @@ export default {
                     hasJudge: false,
                     childern: [
                         {
+                            path: '/attendance',
+                            title: '考勤',
+                            showFlag: true,
+                            hasJudge: false
+                        },
+                        {
                             path: '/fileExchange',
                             title: '文件交换',
                             showFlag: true,

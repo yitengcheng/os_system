@@ -25,6 +25,7 @@ import Schedule from './../views/schedule';
 import FileExchange from './../views/fileExchange';
 import PasswordManagement from './../views/passwordManagement';
 import PersonalAddressBook from './../views/personalAddressBook';
+import Attendance from './../views/attendance';
 
 Vue.use(Router);
 
@@ -124,6 +125,11 @@ export default new Router({
             path: '/permissions',
             name: 'permissions',
             component: Permissions
+        },
+        {
+            path: '/attendance',
+            name: 'attendance',
+            component: Attendance
         }
     ]
 });
