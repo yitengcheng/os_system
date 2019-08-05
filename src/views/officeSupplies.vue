@@ -23,7 +23,7 @@
         <ElTable :stripe="true" :tableData="stockData" :tableKey="tableKey" :border="true">
           <div slot-scope="data">
             <el-button @click.native.prevent="checkout(data.data.row)" type="text" size="small">领取</el-button>
-            <el-button @click="edit(data.data.row)" type="text" size="small">编辑</el-button>
+            <el-button @click.native.prevent="edit(data.data.row)" type="text" size="small">编辑</el-button>
           </div>
         </ElTable>
       </div>
