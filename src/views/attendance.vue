@@ -70,7 +70,6 @@ export default {
                             });
                         });
                         this.dataList = data;
-                        console.log('---------', this.dataList);
                     } else {
                         this.$alert(msg);
                     }
