@@ -24,6 +24,7 @@
             :index="object.path"
             v-if="!object.childern"
             class="menuChildrenItem"
+            v-show="object.showFlag"
           >{{object.title}}</el-menu-item>
           <el-menu-item-group v-else :title="object.title" class="menuChildrenItem">
             <el-menu-item
@@ -31,7 +32,7 @@
               class="menuChildrenItem"
               v-for="(chirldItem,j) in object.childern"
               :key="j"
-              v-show="item.showFlag"
+              v-show="chirldItem.showFlag"
             >{{chirldItem.title}}</el-menu-item>
           </el-menu-item-group>
         </div>
@@ -82,8 +83,8 @@ export default {
                 },
                 {
                     title: '公共资源',
-                    showFlag: true,
-                    hasJudge: false,
+                    showFlag: false,
+                    hasJudge: true,
                     childern: [
                         {
                             path: '/publicAddressBook',
@@ -150,8 +151,8 @@ export default {
                 },
                 {
                     title: '个人办公',
-                    showFlag: true,
-                    hasJudge: false,
+                    showFlag: false,
+                    hasJudge: true,
                     childern: [
                         {
                             path: '/attendance',
@@ -209,16 +210,21 @@ export default {
                             'personnel',
                             'accessManager'
                         ]);
-                    } else if (item.title === '人员管理') {
-                        item.showFlag = this.$utils.hasPermission(user, [
-                            'admin',
-                            'personnel'
-                        ]);
-                    } else if (item.title === '权限管理') {
-                        item.showFlag = this.$utils.hasPermission(user, [
-                            'admin',
-                            'accessManager'
-                        ]);
+                        item.childern.forEach(childern => {
+                            if (childern.hasJudge) {
+                                if (childern.title === '人员管理') {
+                                    childern.showFlag = this.$utils.hasPermission(user, [
+                                        'admin',
+                                        'personnel'
+                                    ]);
+                                } else if (childern.title === '权限管理') {
+                                    childern.showFlag = this.$utils.hasPermission(user, [
+                                        'admin',
+                                        'accessManager'
+                                    ]);
+                                }
+                            }
+                        });
                     } else if (item.title === '企业办公') {
                         item.showFlag = this.$utils.hasPermission(user, [
                             'admin',
@@ -229,33 +235,41 @@ export default {
                             'conferenceRoom',
                             'carManagement'
                         ]);
-                    } else if (item.title === '文件发布') {
-                        item.showFlag = this.$utils.hasPermission(user, [
-                            'admin',
-                            'filesUpload'
-                        ]);
-                    } else if (item.title === '信息发布') {
-                        item.showFlag = this.$utils.hasPermission(user, [
-                            'admin',
-                            'information'
-                        ]);
-                    } else if (item.title === '办公用品管理') {
-                        item.showFlag = this.$utils.hasPermission(user, [
-                            'admin',
-                            'officeSupplies'
-                        ]);
-                    } else if (item.title === '人力资源管理') {
-                        item.showFlag = this.$utils.hasPermission(user, ['admin', 'HRM']);
-                    } else if (item.title === '会议室管理') {
-                        item.showFlag = this.$utils.hasPermission(user, [
-                            'admin',
-                            'conferenceRoom'
-                        ]);
-                    } else if (item.title === '车辆管理') {
-                        item.showFlag = this.$utils.hasPermission(user, [
-                            'admin',
-                            'carManagement'
-                        ]);
+                        item.childern.forEach(childern => {
+                            if (childern.title === '文件发布') {
+                                childern.showFlag = this.$utils.hasPermission(user, [
+                                    'admin',
+                                    'filesUpload'
+                                ]);
+                            } else if (childern.title === '信息发布') {
+                                childern.showFlag = this.$utils.hasPermission(user, [
+                                    'admin',
+                                    'information'
+                                ]);
+                            } else if (childern.title === '办公用品管理') {
+                                childern.showFlag = this.$utils.hasPermission(user, [
+                                    'admin',
+                                    'officeSupplies'
+                                ]);
+                            } else if (childern.title === '人力资源管理') {
+                                childern.showFlag = this.$utils.hasPermission(user, [
+                                    'admin',
+                                    'HRM'
+                                ]);
+                            } else if (childern.title === '会议室管理') {
+                                childern.showFlag = this.$utils.hasPermission(user, [
+                                    'admin',
+                                    'conferenceRoom'
+                                ]);
+                            } else if (childern.title === '车辆管理') {
+                                childern.showFlag = this.$utils.hasPermission(user, [
+                                    'admin',
+                                    'carManagement'
+                                ]);
+                            }
+                        });
+                    } else if (item.title === '个人办公' || item.title === '公共资源') {
+                        item.showFlag = !!this.userInfo;
                     }
                 }
             });

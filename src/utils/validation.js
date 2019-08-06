@@ -61,7 +61,7 @@ export function getAge (birthday) {
 // 判断是否拥有此权限
 export function hasPermission (user, permission) {
     if (user) {
-        if (_.intersection(user.permissions, permission) && user.permissions.length > 0) {
+        if (_.intersection(user.permissions, permission).length !== 0 && user.permissions.length > 0) {
             return true;
         } else {
             return false;
