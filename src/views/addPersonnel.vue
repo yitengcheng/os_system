@@ -24,11 +24,57 @@
         value="position"
         @onChange="onChange"
       />
+      <FormInput label="职务" :form="form" value="duty" @onChange="onChange" maxlength="10" />
+      <FormInput label="身份证" :form="form" value="identity" @onChange="onChange" maxlength="18" />
+      <FormInput
+        label="户籍所在地"
+        :form="form"
+        value="censusRegisteruty"
+        @onChange="onChange"
+        maxlength="50"
+      />
+      <FormInput
+        label="现居住地"
+        :form="form"
+        value="placeOfResidence"
+        @onChange="onChange"
+        maxlength="50"
+      />
+      <FormRadio
+        label="婚姻状况"
+        :checks="['未婚','已婚','离异','丧偶']"
+        :form="form"
+        value="maritalStatus"
+        @onChange="onChange"
+      />
       <FormInput label="电话" :form="form" value="phone" @onChange="onChange" maxlength="11" />
-      <FormInput label="电子邮箱" :form="form" value="email" @onChange="onChange" maxlength="30" />
       <FormInput label="登录系统用户名" :form="form" value="userName" @onChange="onChange" maxlength="15" />
       <FormInput label="登录系统密码" :form="form" value="password" @onChange="onChange" maxlength="20" />
       <FormRadio :checks="['男','女']" label="性别" :form="form" value="sex" @onChange="onChange" />
+      <FormRadio
+        :checks="['是','否']"
+        label="是否入党"
+        :form="form"
+        value="hasPartyMember"
+        @onChange="onChange"
+      />
+      <FormInput
+        v-if="form.hasPartyMember === 0"
+        label="所在党支部"
+        :form="form"
+        value="partyBranch"
+        @onChange="onChange"
+        maxlength="20"
+      />
+      <FormDateTime
+        v-if="form.hasPartyMember === 0"
+        options="[]"
+        label="入党时间"
+        type="date"
+        :form="form"
+        value="joinThePartyTime"
+        @onChange="onChange"
+      />
       <FormRadio
         :checks="['高中','中专','大专','本科','硕士','博士']"
         label="学历"
@@ -62,6 +108,7 @@ import FormRadio from '../components/form/formRadio';
 import FormSelect from '../components/form/formSelect';
 import FormDateTime from '../components/form/formDateTime';
 import PageTitle from '../components/PageTitle';
+import { mapState } from 'vuex';
 export default {
     components: { PageTitle, FormInput, FormRadio, FormDateTime, FormSelect },
     data () {
@@ -76,13 +123,45 @@ export default {
                 callback();
             }
         };
+        let validatorJoinThePartyTime = (rule, value, callback) => {
+            if (value === '' && this.form.hasPartyMember === 0) {
+                callback(new Error('请选择入党时间'));
+            } else {
+                callback();
+            }
+        };
+        let validatorIdentity = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请输入身份证号'));
+            } else if (value.length !== 18) {
+                callback(new Error('身份证号长度有误'));
+            } else if (!this.$utils.isIdentityCode(value)) {
+                callback(new Error('请输入正确身份证号'));
+            } else {
+                callback();
+            }
+        };
+        let validatorPartyBranch = (rule, value, callback) => {
+            if (value === '' && this.form.hasPartyMember === 0) {
+                callback(new Error('请填写所在党支部'));
+            } else {
+                callback();
+            }
+        };
         return {
             form: {
                 name: '',
                 branch: '',
                 position: '',
                 phone: '',
-                email: '',
+                duty: '',
+                identity: '',
+                censusRegisteruty: '',
+                placeOfResidence: '',
+                maritalStatus: 0,
+                hasPartyMember: 1,
+                joinThePartyTime: '',
+                partyBranch: '',
                 userName: '',
                 password: '',
                 sex: 0,
@@ -94,16 +173,28 @@ export default {
                 name: [{ required: true, message: '请输入姓名', trigger: 'blur' }],
                 branch: [{ required: true, message: '请选择部门', trigger: 'blur' }],
                 position: [{ required: true, message: '请选择级别', trigger: 'blur' }],
+                duty: [{ required: true, message: '请输入职务', trigger: 'blur' }],
+                identity: [
+                    { required: true, validator: validatorIdentity, trigger: 'blur' }
+                ],
+                censusRegisteruty: [
+                    { required: true, message: '请输入户籍所在地', trigger: 'blur' }
+                ],
+                placeOfResidence: [
+                    { required: true, message: '请输入现居住地', trigger: 'blur' }
+                ],
+                maritalStatus: [
+                    { required: true, message: '请选择婚姻状况', trigger: 'blur' }
+                ],
+                hasPartyMember: [
+                    { required: true, message: '请选择是否入党', trigger: 'blur' }
+                ],
+                joinThePartyTime: [
+                    { validator: validatorJoinThePartyTime, trigger: 'blur' }
+                ],
+                partyBranch: [{ validator: validatorPartyBranch, trigger: 'blur' }],
                 phone: [
                     { required: true, validator: validatorIsvalidPhone, trigger: 'blur' }
-                ],
-                email: [
-                    { required: true, message: '请输入邮箱', trigger: 'blur' },
-                    {
-                        type: 'email',
-                        message: '请输入正确的邮箱地址',
-                        trigger: ['blur', 'change']
-                    }
                 ],
                 userName: [
                     { required: true, message: '请输入登录系统账户', trigger: 'blur' }
@@ -124,7 +215,11 @@ export default {
             positionList: []
         };
     },
-    computed: {},
+    computed: {
+        ...mapState({
+            user: state => state.user.user
+        })
+    },
     mounted () {
         this.$http.post('/api/getBranchs').then(res => {
             let { success, branchs } = res;
@@ -150,21 +245,23 @@ export default {
         doSubmit () {
             this.$refs.form.validate(valid => {
                 if (valid) {
-                    this.$http.post('/api/addPerson', { user: this.form }).then(res => {
-                        let { success, msg } = res;
-                        if (success) {
-                            this.$confirm('创建成功,点击确定回到上一页面', '提示', {
-                                confirmButtonText: '确定',
-                                type: 'success'
-                            })
-                                .then(() => {
-                                    this.$router.back();
+                    this.$http
+                        .post('/api/addPerson', { user: this.form, userId: this.user._id })
+                        .then(res => {
+                            let { success, msg } = res;
+                            if (success) {
+                                this.$confirm('创建成功,点击确定回到上一页面', '提示', {
+                                    confirmButtonText: '确定',
+                                    type: 'success'
                                 })
-                                .catch(() => {});
-                        } else {
-                            this.$alert(msg);
-                        }
-                    });
+                                    .then(() => {
+                                        this.$router.back();
+                                    })
+                                    .catch(() => {});
+                            } else {
+                                this.$alert(msg);
+                            }
+                        });
                 } else {
                     this.$alert('请认真核对信息');
                 }

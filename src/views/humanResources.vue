@@ -10,7 +10,13 @@
           size="small"
         >岗位调整</el-button>
         <el-button
-          v-if="data.data.row.workStatus === '在职'"
+          v-if="data.data.row.workStatus === '实习'"
+          @click.native.prevent="personPositive(data.data.row)"
+          type="text"
+          size="small"
+        >转正</el-button>
+        <el-button
+          v-if="data.data.row.workStatus === '在职'  || data.data.row.workStatus === '实习'"
           @click.native.prevent="applyForLeave(data.data.row)"
           type="text"
           size="small"
@@ -89,6 +95,8 @@ import FormSelect from '../components/form/formSelect';
 import FormDateTime from '../components/form/formDateTime';
 import FormUpload from '../components/form/formUpload';
 import { mapState } from 'vuex';
+
+let workStatus = ['实习', '在职', '离职中', '离职'];
 export default {
     components: {
         PageTitle,
@@ -209,7 +217,7 @@ export default {
                             position: person.position.position,
                             sex: person.sex === '0' ? '男' : '女',
                             age: this.$utils.getAge(person.birthday),
-                            workStatus: person.workStatus === '1' ? '在职' : '离职中',
+                            workStatus: workStatus[person.workStatus * 1],
                             id: person._id
                         });
                     });
@@ -231,6 +239,7 @@ export default {
                 if (valid) {
                     this.$http
                         .post('/api/postAdjustment', {
+                            userId: this.user._id,
                             targetId: this.targetUser.id,
                             ...this.adjust
                         })
@@ -252,16 +261,34 @@ export default {
             });
         },
         applyForLeave (user) {
-            this.$http.post('/api/applyForLeave', { targetId: user.id }).then(res => {
-                let { msg, success } = res;
-                success ? this.getPerson() : this.$alert(msg);
-            });
+            this.$http
+                .post('/api/applyForLeave', {
+                    userId: this.user._id,
+                    targetId: user.id
+                })
+                .then(res => {
+                    let { msg, success } = res;
+                    success ? this.getPerson() : this.$alert(msg);
+                });
+        },
+        personPositive (user) {
+            this.$http
+                .post('/api/personPositive', {
+                    userId: this.user._id,
+                    targetId: user.id
+                })
+                .then(res => {
+                    let { msg, success } = res;
+                    success ? this.getPerson() : this.$alert(msg);
+                });
         },
         confirmLeave (user) {
-            this.$http.post('/api/confirmLeave', { targetId: user.id }).then(res => {
-                let { msg, success } = res;
-                success ? this.getPerson() : this.$alert(msg);
-            });
+            this.$http
+                .post('/api/confirmLeave', { userId: this.user._id, targetId: user.id })
+                .then(res => {
+                    let { msg, success } = res;
+                    success ? this.getPerson() : this.$alert(msg);
+                });
         },
         uploadAttendance () {
             this.$refs.attendance.validate(valid => {
