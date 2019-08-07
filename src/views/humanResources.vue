@@ -52,6 +52,7 @@
             value="positionId"
             @onChange="onChange"
           />
+          <FormInput label="职务" :form="adjust" value="duty" @onChange="onChange" />
         </el-form>
       </div>
     </showModel>
@@ -94,6 +95,7 @@ import showModel from '../components/showModel';
 import FormSelect from '../components/form/formSelect';
 import FormDateTime from '../components/form/formDateTime';
 import FormUpload from '../components/form/formUpload';
+import FormInput from '../components/form/formInput';
 import { mapState } from 'vuex';
 
 let workStatus = ['实习', '在职', '离职中', '离职'];
@@ -104,7 +106,8 @@ export default {
         showModel,
         FormSelect,
         FormDateTime,
-        FormUpload
+        FormUpload,
+        FormInput
     },
     data () {
         return {
@@ -117,6 +120,11 @@ export default {
                 {
                     prop: 'position',
                     label: '级别',
+                    width: '150'
+                },
+                {
+                    prop: 'duty',
+                    label: '职务',
                     width: '150'
                 },
                 {
@@ -150,7 +158,8 @@ export default {
             targetUser: {},
             adjust: {
                 branchId: '',
-                positionId: ''
+                positionId: '',
+                duty: ''
             },
             attendance: {
                 date: '',
@@ -158,7 +167,10 @@ export default {
             },
             rules: {
                 branchId: [{ required: true, message: '请选择部门', trigger: 'blur' }],
-                positionId: [{ required: true, message: '请选择级别', trigger: 'blur' }]
+                positionId: [
+                    { required: true, message: '请选择级别', trigger: 'blur' }
+                ],
+                duty: [{ required: true, message: '请输入职务', trigger: 'blur' }]
             },
             attendanceRules: {
                 date: [{ required: true, message: '请选择考勤月份', trigger: 'blur' }],
@@ -215,6 +227,7 @@ export default {
                             name: person.name,
                             branch: person.branch.name,
                             position: person.position.position,
+                            duty: person.duty,
                             sex: person.sex === '0' ? '男' : '女',
                             age: this.$utils.getAge(person.birthday),
                             workStatus: workStatus[person.workStatus * 1],
