@@ -2,14 +2,27 @@
   <div class="contain">
     <PageTitle label="车辆管理" />
     <div class="tableContain">
-      <div class="buttonContain">
+      <div class="titleContain">
+        <div class="searchContain">
+          <p>月份：</p>
+          <el-date-picker v-model="date" type="month"></el-date-picker>
+          <el-button type="primary" @click="getCarRecord" class="searchBtn">搜索</el-button>
+          <download-excel
+            class="downExcel"
+            :data="tableData"
+            :fields="json_fields"
+            :title="excelTitle"
+            worksheet="用车列表"
+            name="用车列表.xls"
+          >导出Excel</download-excel>
+        </div>
         <el-button type="primary" @click="showModel('addModelFlag')">添加车辆</el-button>
         <el-button type="primary" @click="showModel('subscribeModelFlag')">预约使用车辆</el-button>
       </div>
       <ElTable :stripe="true" :border="true" :tableKey="labels" :tableData="tableData">
         <div slot-scope="data">
           <el-button
-            v-if="data.data.status === '未完成'"
+            v-if="data.data.row.status === '未完成'"
             @click.native.prevent="showConfirModel(data.data.row)"
             type="text"
             size="small"
@@ -213,6 +226,12 @@ export default {
                     width: '120'
                 },
                 {
+                    prop: 'expenseAccount',
+                    label: '费用',
+                    unit: '元',
+                    width: '120'
+                },
+                {
                     prop: 'status',
                     label: '状态',
                     width: '120'
@@ -227,10 +246,23 @@ export default {
                     width: '150'
                 }
             ],
+            json_fields: {
+                序号: 'serialNumber',
+                车主: 'carOwner',
+                车牌: 'plate',
+                用途: 'application',
+                起始公里: 'startingKm',
+                结束公里: 'endingKm',
+                本次里程: 'mileage',
+                费用: 'expenseAccount',
+                时间: 'serviceTime'
+            },
             tableData: [],
             addModelFlag: false,
             subscribeModelFlag: false,
             confirmModelFlag: false,
+            excelTitle: '',
+            date: '',
             carInfo: {
                 branchId: '',
                 carOwner: '',
@@ -327,12 +359,13 @@ export default {
         getCarRecord () {
             this.tableData = [];
             this.$http
-                .post('/api/getCarRecord', { userId: this.user._id })
+                .post('/api/getCarRecord', { userId: this.user._id, date: this.date })
                 .then(res => {
                     let { success, msg, carRecordList } = res;
                     if (success) {
-                        carRecordList.forEach(item => {
+                        carRecordList.forEach((item, index) => {
                             this.tableData.push({
+                                serialNumber: index + 1,
                                 carOwner: item.carOwner,
                                 plate: item.plate,
                                 carModel: item.carModel,
@@ -340,11 +373,15 @@ export default {
                                 startingKm: item.startingKm || 0,
                                 endingKm: item.endingKm || 0,
                                 mileage: item.mileage || 0,
+                                expenseAccount: item.mileage ? item.mileage * 1 : 0,
                                 status: item.status === '1' ? '未完成' : '完成',
                                 serviceTime: item.serviceTime,
                                 recordId: item.recordId
                             });
                         });
+                        this.excelTitle = this.date
+                            ? this.$moment(this.date).format('MM') + '月车辆使用记录表'
+                            : '车辆使用记录表';
                     } else {
                         this.$alert(msg);
                     }
@@ -443,6 +480,7 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
+@import "../assets/scss/baseAttribute";
 .contain {
   display: flex;
   flex: 1;
@@ -455,14 +493,34 @@ export default {
   align-self: center;
   flex-direction: column;
 }
-.buttonContain {
+.titleContain {
   margin-bottom: 10px;
   display: flex;
-  justify-content: flex-end;
 }
 .modelContain {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+.searchContain {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+}
+.searchBtn {
+  margin-left: 10px;
+}
+.downExcel {
+  margin-left: 20px;
+  width: 80px;
+  height: 30px;
+  line-height: 30px;
+  border: 1px solid $color-background;
+  background-color: $color-background;
+  color: #fff;
+  font-size: 12px;
+  text-align: center;
+  border-radius: 3px;
 }
 </style>
