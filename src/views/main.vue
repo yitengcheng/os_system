@@ -23,6 +23,13 @@
         </div>
       </div>
       <div class="companyItem">
+        <icon name="党员" w="150px" h="150px" />
+        <div class="infoContain">
+          <p class="infoTitle">党员人数</p>
+          <p class="info">{{numberOfParty}}人</p>
+        </div>
+      </div>
+      <div class="companyItem">
         <icon name="留言板" w="150px" h="150px" />
         <div class="infoContain">
           <p class="infoTitle">留言板</p>
@@ -54,6 +61,7 @@ export default {
             totalNumberOfPeople: 0,
             numberOfHighlyEducated: 0,
             numberOfRestart: 0,
+            numberOfParty: 0,
             messageNum: 0,
             profileNum: 0,
             option: {
@@ -149,6 +157,7 @@ export default {
                     totalNumberOfPeople,
                     numberOfHighlyEducated,
                     numberOfRestart,
+                    numberOfParty,
                     messageNum,
                     profileNum,
                     nameData,
@@ -159,6 +168,7 @@ export default {
                     this.totalNumberOfPeople = totalNumberOfPeople;
                     this.numberOfHighlyEducated = numberOfHighlyEducated;
                     this.numberOfRestart = numberOfRestart;
+                    this.numberOfParty = numberOfParty;
                     this.messageNum = messageNum;
                     this.profileNum = profileNum;
                     this.worldCloudoption['series'][0]['data'] = nameData;
