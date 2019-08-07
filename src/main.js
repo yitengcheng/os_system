@@ -18,6 +18,7 @@ import Icon from 'vue2-svg-icon/Icon.vue';
 import ECharts from 'vue-echarts/components/ECharts.vue';
 import 'echarts';
 import 'echarts-wordcloud';
+import JsonExcel from 'vue-json-excel';
 
 Vue.config.productionTip = false;
 Vue.use(VueLazyLoad, {
@@ -25,6 +26,7 @@ Vue.use(VueLazyLoad, {
 });
 Vue.use(infiniteScroll);
 Vue.component('icon', Icon);
+Vue.component('downloadExcel', JsonExcel);
 Vue.component('v-chart', ECharts);
 axios.interceptors.response.use(
     response => {
