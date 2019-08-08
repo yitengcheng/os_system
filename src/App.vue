@@ -1,17 +1,19 @@
 <template>
-  <el-container id="app">
-    <el-aside width="151px" class="sidebar-container">
-      <el-scrollbar style="height:100%">
-        <SideBar />
-      </el-scrollbar>
-    </el-aside>
-
+  <el-container id="app" style="backgroundColor:#f3f3f3">
+    <transition name="sideBar">
+      <el-aside v-if="showBar" width="151px" class="sidebar-container">
+        <el-scrollbar style="height:100%">
+          <SideBar />
+        </el-scrollbar>
+      </el-aside>
+    </transition>
     <el-container>
       <el-header class="elHeader">
         <Header />
       </el-header>
       <el-scrollbar style="height:100%">
         <el-main class="main">
+          <el-button @click="barFlag" class="showBarBtn" icon="el-icon-d-arrow-left"></el-button>
           <router-view class="mainContain"></router-view>
         </el-main>
       </el-scrollbar>
@@ -42,6 +44,16 @@ export default {
         window.addEventListener('beforeunload', () => {
             sessionStorage.setItem('store', JSON.stringify(this.$store.state));
         });
+    },
+    data () {
+        return {
+            showBar: true
+        };
+    },
+    methods: {
+        barFlag () {
+            this.showBar = !this.showBar;
+        }
     }
 };
 </script>
@@ -69,5 +81,26 @@ export default {
 .sidebar-container {
   overflow: hidden;
   background-color: $color-background;
+}
+.showBarBtn {
+  padding: 0;
+  width: 15px;
+  height: 30px;
+  background-color: gray;
+  color: #fff;
+  position: absolute;
+  top: 50%;
+}
+.sideBar-enter,
+.sideBar-leave-to {
+  transform: translate3d(-100%, 0, 0);
+}
+.sideBar-leave,
+.sideBar-enter-to {
+  transform: translate3d(0, 0, 0);
+}
+.sideBar-enter-active,
+.sideBar-leave-active {
+  transition: all 0.3s;
 }
 </style>
