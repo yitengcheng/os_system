@@ -13,7 +13,11 @@
       </el-header>
       <el-scrollbar style="height:100%">
         <el-main class="main">
-          <el-button @click="barFlag" class="showBarBtn" icon="el-icon-d-arrow-left"></el-button>
+          <el-button
+            @click="barFlag"
+            class="showBarBtn"
+            :icon="showBar?'el-icon-d-arrow-left':'el-icon-d-arrow-right'"
+          />
           <router-view class="mainContain"></router-view>
         </el-main>
       </el-scrollbar>
