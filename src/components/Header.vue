@@ -18,7 +18,7 @@ export default {
     methods: {
         getFullCreeen () {
             this.n++;
-            this.n % 2 == 0
+            this.n % 2 === 0
                 ? this.outFullCreeen(document)
                 : this.inFullCreeen(document.documentElement);
         },
@@ -32,6 +32,7 @@ export default {
             if (typeof rfs !== 'undefined' && rfs) {
                 rfs.call(el);
             } else if (typeof window.ActiveXObject !== 'undefined') {
+                /* global ActiveXObject */
                 let wscript = new ActiveXObject('WScript.Shell');
                 if (wscript != null) {
                     wscript.SendKeys('{F11}');

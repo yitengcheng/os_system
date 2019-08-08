@@ -85,7 +85,7 @@ export default {
 .showBarBtn {
   padding: 0;
   width: 15px;
-  height: 30px;
+  height: 50px;
   background-color: gray;
   color: #fff;
   position: absolute;

@@ -185,7 +185,6 @@ export default {
 <style lang='scss' scoped>
 .companyInfoContain {
   display: flex;
-  height: 450px;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
@@ -218,6 +217,7 @@ export default {
   flex: 1;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
   padding: 20px;
   background-color: #f3f3f3;
 }
