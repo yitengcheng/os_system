@@ -1,7 +1,10 @@
 <template>
   <div class="contain">
     <div class="title">亿隆智慧物流园办公系统</div>
-    <div>
+    <div class="headerContain">
+      <span @click="getFullCreeen">
+        <icon name="全屏" w="30px" h="30px" style="marginRight: 20px" />
+      </span>
       <el-image src="static/wuliuyuan_logo.png" class="logo" />
     </div>
   </div>
@@ -9,12 +12,49 @@
 
 <script>
 export default {
-    components: {},
     data () {
-        return {};
+        return { n: 0 };
     },
-    computed: {},
-    methods: {}
+    methods: {
+        getFullCreeen () {
+            this.n++;
+            this.n % 2 == 0
+                ? this.outFullCreeen(document)
+                : this.inFullCreeen(document.documentElement);
+        },
+        inFullCreeen (element) {
+            let el = element;
+            let rfs =
+        el.requestFullScreen ||
+        el.webkitRequestFullScreen ||
+        el.mozRequestFullScreen ||
+        el.msRequestFullScreen;
+            if (typeof rfs !== 'undefined' && rfs) {
+                rfs.call(el);
+            } else if (typeof window.ActiveXObject !== 'undefined') {
+                let wscript = new ActiveXObject('WScript.Shell');
+                if (wscript != null) {
+                    wscript.SendKeys('{F11}');
+                }
+            }
+        },
+        outFullCreeen (element) {
+            let el = element;
+            let cfs =
+        el.cancelFullScreen ||
+        el.webkitCancelFullScreen ||
+        el.mozCancelFullScreen ||
+        el.exitFullScreen;
+            if (typeof cfs !== 'undefined' && cfs) {
+                cfs.call(el);
+            } else if (typeof window.ActiveXObject !== 'undefined') {
+                let wscript = new ActiveXObject('WScript.Shell');
+                if (wscript != null) {
+                    wscript.SendKeys('{F11}');
+                }
+            }
+        }
+    }
 };
 </script>
 <style lang='scss' scoped>
@@ -32,5 +72,8 @@ export default {
 .logo {
   width: 180px;
   height: 30px;
+}
+.headerContain {
+  display: flex;
 }
 </style>
