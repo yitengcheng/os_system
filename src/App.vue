@@ -11,7 +11,7 @@
       <el-header class="elHeader">
         <Header />
       </el-header>
-      <el-scrollbar style="height:100%">
+      <el-scrollbar style="height:100%;backgroundColor:#fff">
         <el-main class="main">
           <el-button
             @click="barFlag"
@@ -61,7 +61,7 @@ export default {
     }
 };
 </script>
-<style lang="scss">
+<style lang="scss" >
 @import "./assets/scss/baseAttribute.scss";
 #app {
   display: flex;
