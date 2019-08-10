@@ -90,6 +90,7 @@ export default {
   align-self: center;
   justify-content: center;
   align-items: center;
+  margin-bottom: 10px;
 }
 .label {
   width: 50px;
