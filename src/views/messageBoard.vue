@@ -51,8 +51,7 @@ export default {
     },
     mounted () {
         window.addEventListener('resize', this.handleResize);
-        console.log('---111', this.fullWidth);
-        this.style = 'width:' + this.fullWidth + 'px;height:400px';
+        this.style = 'width:' + (this.fullWidth - 120) * 0.82 + 'px;height:400px';
         this.$http.post('/api/getMessage').then(res => {
             let { success, msg, messageList } = res;
             if (success) {
