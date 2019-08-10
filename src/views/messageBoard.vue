@@ -4,7 +4,7 @@
     <div class="message-board">
       <el-image class="message-board" src="static/backimage.png"></el-image>
       <div class="message">
-        <canvas ref="canvas" :width="1500" height="400" style="width: 1500px;height: 400px"></canvas>
+        <canvas ref="canvas" :width="fullWidth*0.85" height="400" :style="style"></canvas>
         <canvas ref="hiddenCanvas" width="0" height="0" style="display: none"></canvas>
       </div>
       <div class="input-area">
@@ -33,11 +33,12 @@ export default {
     components: { PageTitle },
     data () {
         return {
+            fullWidth: document.documentElement.clientWidth,
             dmArr: [], // 弹幕列表
-            gap: 5,
+            gap: 6,
             timer: null,
-            timer1: null,
             width: 0,
+            style: '',
             dmInput: '',
             color: '',
             temp: true
@@ -49,6 +50,9 @@ export default {
         })
     },
     mounted () {
+        window.addEventListener('resize', this.handleResize);
+        console.log('---111', this.fullWidth);
+        this.style = 'width:' + this.fullWidth + 'px;height:400px';
         this.$http.post('/api/getMessage').then(res => {
             let { success, msg, messageList } = res;
             if (success) {
@@ -61,6 +65,7 @@ export default {
     },
     destroyed () {
         this.temp = false;
+        window.removeEventListener('resize', this.handleResize);
     },
     watch: {
         temp: {
@@ -74,7 +79,9 @@ export default {
     methods: {
         pushDm (text, color) {
             let y = this.getY(); // 先确定跑道
-            let x = 1500; // 初始x坐标为canvas的右边界
+            let x = this.fullWidth * 0.85 - 300; // 初始x坐标为canvas的右边界
+            console.log('---', this.fullWidth * 0.85 - 300);
+
             let delayWidth = 0; // 同跑道
             let hiddenCanvas = this.$refs.hiddenCanvas;
             for (let i = 0, len = this.dmArr.length; i < len; i++) {
@@ -95,7 +102,12 @@ export default {
         },
         getY () {
             let range = Math.floor(400 / this.gap); // 跑道数量
-            return Math.floor(Math.random() * range + 1) * this.gap;
+            let tmp = Math.floor(Math.random() * range + 1) * this.gap;
+            if (tmp < 25 || tmp > 385) {
+                this.getY();
+            } else {
+                return tmp;
+            }
         },
         getColor () {
             return `${Math.floor(Math.random() * 25000000).toString(16)}`;
@@ -104,7 +116,7 @@ export default {
             if (this.$refs.canvas) {
                 let ctx = this.$refs.canvas.getContext('2d');
                 this.timer = setInterval(() => {
-                    ctx.clearRect(0, 0, 1800, 400);
+                    ctx.clearRect(0, 0, this.fullWidth, 400);
                     ctx.save();
                     ctx.font = '30px Microsoft YaHei';
                     for (let i = 0; i < this.dmArr.length; i++) {
@@ -114,21 +126,22 @@ export default {
                         dm.x -= dm.speed;
                         ctx.fillStyle = `#${dm.color}`;
                         ctx.fillText(dm.text, dm.x, dm.y);
-                        if (this.dmArr[this.dmArr.length - 1].x === 0) {
+                        if (this.dmArr[this.dmArr.length - 1].x === -200) {
                             for (let j = 0; j < this.dmArr.length; j++) {
-                                this.dmArr[j].x = 1500 + j * 50;
+                                this.dmArr[j].x = this.fullWidth * 0.85 + j * 50;
                             }
                             this.temp = true;
                             clearInterval(this.timer);
                         }
                     }
+
                     ctx.restore();
                 }, 10);
             }
         },
         stop () {
             let ctx = this.$refs.canvas.getContext('2d');
-            ctx.clearRect(0, 0, 1500, 400);
+            ctx.clearRect(0, 0, this.fullWidth * 0.85, 400);
         },
         sent () {
             this.pushDm(this.dmInput, this.color);
@@ -139,13 +152,6 @@ export default {
                 })
                 .then(res => {
                     let { success, msg } = res;
-                    this.dmArr.push({
-                        text: this.dmInput,
-                        x: 1500,
-                        y: 123,
-                        speed: 3,
-                        color: '#ffffff'
-                    });
                 });
 
             this.dmInput = '';
@@ -174,7 +180,7 @@ export default {
 }
 .message {
   height: 400px;
-  width: 1500px;
+  width: 85%;
   top: 30px;
   position: absolute;
   z-index: 1000;
