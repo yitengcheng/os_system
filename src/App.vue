@@ -18,7 +18,7 @@
             class="showBarBtn"
             :icon="showBar?'el-icon-d-arrow-left':'el-icon-d-arrow-right'"
           />
-          <router-view class="mainContain"></router-view>
+          <router-view></router-view>
         </el-main>
       </el-scrollbar>
     </el-container>
