@@ -8,6 +8,7 @@
       :border="border"
       :data="tableData"
       :stripe="stripe"
+      @row-click="cilckRow"
     >
       <el-table-column v-if="hasCheck" type="selection" width="55"></el-table-column>
       <el-table-column
@@ -48,6 +49,9 @@ export default {
         filterHandler (value, row, column) {
             const property = column['property'];
             return row[property] === value;
+        },
+        cilckRow (row, column, event) {
+            this.$emit('cilckRow', row, column, event);
         }
     }
 };
