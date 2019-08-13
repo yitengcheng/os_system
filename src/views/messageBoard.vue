@@ -2,7 +2,7 @@
   <div class="contain">
     <PageTitle label="留言板" />
     <div class="message-board">
-      <el-image class="message-board" src="static/backimage.png"></el-image>
+      <el-image class="message-board" :src="backgroundImg"></el-image>
       <div class="message">
         <canvas ref="canvas" :width="fullWidth*0.85" height="400" :style="style"></canvas>
         <canvas ref="hiddenCanvas" width="0" height="0" style="display: none"></canvas>
@@ -26,22 +26,23 @@
 </template>
 
 <script>
-import PageTitle from '../components/PageTitle';
-import { mapState } from 'vuex';
+import PageTitle from "../components/PageTitle";
+import { mapState } from "vuex";
 
 export default {
     components: { PageTitle },
-    data () {
+    data() {
         return {
             fullWidth: document.documentElement.clientWidth,
             dmArr: [], // 弹幕列表
             gap: 6,
             timer: null,
             width: 0,
-            style: '',
-            dmInput: '',
-            color: '',
-            temp: true
+            style: "",
+            dmInput: "",
+            color: "",
+            temp: true,
+            backgroundImg: require("../assets/backimage.png")
         };
     },
     computed: {
@@ -49,10 +50,10 @@ export default {
             user: state => state.user.user
         })
     },
-    mounted () {
-        window.addEventListener('resize', this.handleResize);
-        this.style = 'width:' + (this.fullWidth - 120) * 0.82 + 'px;height:400px';
-        this.$http.post('/api/getMessage').then(res => {
+    mounted() {
+        window.addEventListener("resize", this.handleResize);
+        this.style = "width:" + (this.fullWidth - 120) * 0.82 + "px;height:400px";
+        this.$http.post("/api/getMessage").then(res => {
             let { success, msg, messageList } = res;
             if (success) {
                 for (let i = 0; i < messageList.length; i++) {
@@ -62,13 +63,13 @@ export default {
             }
         });
     },
-    destroyed () {
+    destroyed() {
         this.temp = false;
-        window.removeEventListener('resize', this.handleResize);
+        window.removeEventListener("resize", this.handleResize);
     },
     watch: {
         temp: {
-            handler (newvalue, oldvalue) {
+            handler(newvalue, oldvalue) {
                 if (newvalue) {
                     this.start();
                 }
@@ -76,10 +77,9 @@ export default {
         }
     },
     methods: {
-        pushDm (text, color) {
+        pushDm(text, color) {
             let y = this.getY(); // 先确定跑道
             let x = this.fullWidth * 0.85 - 300; // 初始x坐标为canvas的右边界
-            console.log('---', this.fullWidth * 0.85 - 300);
 
             let delayWidth = 0; // 同跑道
             let hiddenCanvas = this.$refs.hiddenCanvas;
@@ -87,7 +87,7 @@ export default {
                 let dm = this.dmArr[i];
                 if (y === dm.y) {
                     delayWidth += Math.floor(
-                        hiddenCanvas.getContext('2d').measureText(dm.text).width * 4 + 50
+                        hiddenCanvas.getContext("2d").measureText(dm.text).width * 4 + 50
                     );
                 }
             }
@@ -99,7 +99,7 @@ export default {
                 color: color || this.getColor()
             });
         },
-        getY () {
+        getY() {
             let range = Math.floor(400 / this.gap); // 跑道数量
             let tmp = Math.floor(Math.random() * range + 1) * this.gap;
             if (tmp < 25 || tmp > 385) {
@@ -108,16 +108,16 @@ export default {
                 return tmp;
             }
         },
-        getColor () {
+        getColor() {
             return `${Math.floor(Math.random() * 25000000).toString(16)}`;
         },
-        start () {
+        start() {
             if (this.$refs.canvas) {
-                let ctx = this.$refs.canvas.getContext('2d');
+                let ctx = this.$refs.canvas.getContext("2d");
                 this.timer = setInterval(() => {
                     ctx.clearRect(0, 0, this.fullWidth, 400);
                     ctx.save();
-                    ctx.font = '30px Microsoft YaHei';
+                    ctx.font = "30px Microsoft YaHei";
                     for (let i = 0; i < this.dmArr.length; i++) {
                         this.temp = false;
                         let dm = this.dmArr[i];
@@ -125,7 +125,7 @@ export default {
                         dm.x -= dm.speed;
                         ctx.fillStyle = `#${dm.color}`;
                         ctx.fillText(dm.text, dm.x, dm.y);
-                        if (this.dmArr[this.dmArr.length - 1].x === -200) {
+                        if (this.dmArr[this.dmArr.length - 1].x === 1) {
                             for (let j = 0; j < this.dmArr.length; j++) {
                                 this.dmArr[j].x = this.fullWidth * 0.85 + j * 50;
                             }
@@ -138,14 +138,14 @@ export default {
                 }, 10);
             }
         },
-        stop () {
-            let ctx = this.$refs.canvas.getContext('2d');
+        stop() {
+            let ctx = this.$refs.canvas.getContext("2d");
             ctx.clearRect(0, 0, this.fullWidth * 0.85, 400);
         },
-        sent () {
+        sent() {
             this.pushDm(this.dmInput, this.color);
             this.$http
-                .post('/api/addMessage', {
+                .post("/api/addMessage", {
                     userId: this.user._id,
                     message: this.dmInput
                 })
@@ -153,7 +153,7 @@ export default {
                     let { success, msg } = res;
                 });
 
-            this.dmInput = '';
+            this.dmInput = "";
         }
     }
 };

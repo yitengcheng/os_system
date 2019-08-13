@@ -68,21 +68,20 @@
 </template>
 
 <script>
-import PageTitle from '../components/PageTitle';
-import showModel from '../components/showModel';
-import FormInput from '../components/form/formInput';
-import { mapState } from 'vuex';
+import PageTitle from "../components/PageTitle";
+import showModel from "../components/showModel";
+import { mapState } from "vuex";
 
 export default {
-    components: { PageTitle, showModel, FormInput },
-    data () {
+    components: { PageTitle, showModel },
+    data() {
         return {
             ModelVisible: false,
             infoModelVisible: false,
-            input: '',
-            schedule: '',
-            date: '',
-            infoText: ''
+            input: "",
+            schedule: "",
+            date: "",
+            infoText: ""
         };
     },
     computed: {
@@ -90,11 +89,11 @@ export default {
             user: state => state.user.user
         })
     },
-    mounted () {
+    mounted() {
         this.getschedule();
     },
     methods: {
-        add (data) {
+        add(data) {
             for (let i = 0; i < this.schedule.length; i++) {
                 const item = this.schedule[i];
                 if (item.date === data.day) {
@@ -104,9 +103,9 @@ export default {
             this.ModelVisible = true;
             this.date = data.day;
         },
-        getschedule () {
+        getschedule() {
             this.$http
-                .post('/api/getSchedule', { userId: this.user._id })
+                .post("/api/getSchedule", { userId: this.user._id })
                 .then(res => {
                     let { success, msg, scheduleList } = res;
                     if (success) {
@@ -116,9 +115,9 @@ export default {
                     }
                 });
         },
-        doConfirm () {
+        doConfirm() {
             this.$http
-                .post('/api/addSchedule', {
+                .post("/api/addSchedule", {
                     userId: this.user._id,
                     date: this.date,
                     desc: this.input
@@ -126,9 +125,9 @@ export default {
                 .then(res => {
                     let { success, msg } = res;
                     if (success) {
-                        this.$alert('添加成功');
-                        this.date = '';
-                        this.input = '';
+                        this.$alert("添加成功");
+                        this.date = "";
+                        this.input = "";
                         this.ModelVisible = false;
                         this.getschedule();
                     } else {
@@ -136,14 +135,14 @@ export default {
                     }
                 });
         },
-        lookInfo (data) {
+        lookInfo(data) {
             this.infoText = data.desc;
             this.date = data.date;
             this.infoModelVisible = true;
         },
-        edit () {
+        edit() {
             this.$http
-                .post('/api/updateSchedule', {
+                .post("/api/updateSchedule", {
                     userId: this.user._id,
                     date: this.date,
                     desc: this.infoText
@@ -151,9 +150,9 @@ export default {
                 .then(res => {
                     let { success, msg } = res;
                     if (success) {
-                        this.$alert('修改成功');
-                        this.date = '';
-                        this.infoText = '';
+                        this.$alert("修改成功");
+                        this.date = "";
+                        this.infoText = "";
                         this.infoModelVisible = false;
                         this.getschedule();
                     } else {
@@ -161,7 +160,7 @@ export default {
                     }
                 });
         },
-        closeModel () {
+        closeModel() {
             this.ModelVisible = false;
             this.infoModelVisible = false;
         }

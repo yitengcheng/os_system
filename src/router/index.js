@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Main from './../views/Main';
+import Main from './../views/main';
 import Audit from './../views/audit';
 // 系统管理
 import Personnel from './../views/personnel.vue';

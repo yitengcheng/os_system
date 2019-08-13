@@ -5,53 +5,53 @@
       <span @click="getFullCreeen">
         <icon name="全屏" w="30px" h="30px" style="marginRight: 20px" />
       </span>
-      <el-image src="static/wuliuyuan_logo.png" class="logo" />
+      <el-image :src="img" class="logo" />
     </div>
   </div>
 </template>
 
 <script>
 export default {
-    data () {
-        return { n: 0 };
+    data() {
+        return { n: 0, img: require("../assets/wuliuyuan_logo.png") };
     },
     methods: {
-        getFullCreeen () {
+        getFullCreeen() {
             this.n++;
             this.n % 2 === 0
                 ? this.outFullCreeen(document)
                 : this.inFullCreeen(document.documentElement);
         },
-        inFullCreeen (element) {
+        inFullCreeen(element) {
             let el = element;
             let rfs =
         el.requestFullScreen ||
         el.webkitRequestFullScreen ||
         el.mozRequestFullScreen ||
         el.msRequestFullScreen;
-            if (typeof rfs !== 'undefined' && rfs) {
+            if (typeof rfs !== "undefined" && rfs) {
                 rfs.call(el);
-            } else if (typeof window.ActiveXObject !== 'undefined') {
+            } else if (typeof window.ActiveXObject !== "undefined") {
                 /* global ActiveXObject */
-                let wscript = new ActiveXObject('WScript.Shell');
-                if (wscript != null) {
-                    wscript.SendKeys('{F11}');
+                let wscript = new ActiveXObject("WScript.Shell");
+                if (wscript !== null) {
+                    wscript.SendKeys("{F11}");
                 }
             }
         },
-        outFullCreeen (element) {
+        outFullCreeen(element) {
             let el = element;
             let cfs =
         el.cancelFullScreen ||
         el.webkitCancelFullScreen ||
         el.mozCancelFullScreen ||
         el.exitFullScreen;
-            if (typeof cfs !== 'undefined' && cfs) {
+            if (typeof cfs !== "undefined" && cfs) {
                 cfs.call(el);
-            } else if (typeof window.ActiveXObject !== 'undefined') {
-                let wscript = new ActiveXObject('WScript.Shell');
-                if (wscript != null) {
-                    wscript.SendKeys('{F11}');
+            } else if (typeof window.ActiveXObject !== "undefined") {
+                let wscript = new ActiveXObject("WScript.Shell");
+                if (wscript !== null) {
+                    wscript.SendKeys("{F11}");
                 }
             }
         }

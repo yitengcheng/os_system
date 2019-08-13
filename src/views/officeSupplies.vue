@@ -112,30 +112,28 @@
 </template>
 
 <script>
-import PageTitle from '../components/PageTitle';
-import ElTable from '../components/elComponent/el-table';
-import FormDateTime from '../components/form/formDateTime';
-import FormInput from '../components/form/formInput';
-import Tabs from '../components/Tabs';
-import showModel from '../components/showModel';
-import FormSelect from '../components/form/formSelect';
-import { mapState } from 'vuex';
+import PageTitle from "../components/PageTitle";
+import ElTable from "../components/elComponent/el-table";
+import FormInput from "../components/form/formInput";
+import Tabs from "../components/Tabs";
+import showModel from "../components/showModel";
+import FormSelect from "../components/form/formSelect";
+import { mapState } from "vuex";
 export default {
     components: {
         PageTitle,
         ElTable,
-        FormDateTime,
         FormInput,
         Tabs,
         showModel,
         FormSelect
     },
-    data () {
+    data() {
         let validateNumber = (rule, value, callback) => {
-            if (value === '') {
-                callback(new Error('请输入数量'));
+            if (value === "") {
+                callback(new Error("请输入数量"));
             } else if (!this.$utils.isPositiveInteger(value)) {
-                callback(new Error('请输入正确的数量'));
+                callback(new Error("请输入正确的数量"));
             } else {
                 callback();
             }
@@ -143,65 +141,65 @@ export default {
         return {
             modelVisible: false,
             getModelVisible: false,
-            tabsData: [{ name: '物品列表' }, { name: '领取记录' }],
+            tabsData: [{ name: "物品列表" }, { name: "领取记录" }],
             form: {
-                name: '',
-                category: '',
-                number: '',
-                unit: ''
+                name: "",
+                category: "",
+                number: "",
+                unit: ""
             },
             outForm: {
-                stationeryId: '',
-                branchId: '',
-                receiverId: '',
-                receiveNumber: '',
-                remark: ''
+                stationeryId: "",
+                branchId: "",
+                receiverId: "",
+                receiveNumber: "",
+                remark: ""
             },
             receive: {},
             rules: {
-                name: [{ required: true, message: '请输入名称', trigger: 'blur' }],
-                category: [{ required: true, message: '请输入类别', trigger: 'blur' }],
+                name: [{ required: true, message: "请输入名称", trigger: "blur" }],
+                category: [{ required: true, message: "请输入类别", trigger: "blur" }],
                 number: [
-                    { required: true, validator: validateNumber, trigger: 'blur' }
+                    { required: true, validator: validateNumber, trigger: "blur" }
                 ],
-                unit: [{ required: true, message: '请输入单位', trigger: 'blur' }]
+                unit: [{ required: true, message: "请输入单位", trigger: "blur" }]
             },
             outRules: {
-                branchId: [{ required: true, message: '请选择部门', trigger: 'blur' }],
+                branchId: [{ required: true, message: "请选择部门", trigger: "blur" }],
                 receiverId: [
-                    { required: true, message: '请选择领取人', trigger: 'blur' }
+                    { required: true, message: "请选择领取人", trigger: "blur" }
                 ],
                 receiveNumber: [
-                    { required: true, validator: validateNumber, trigger: 'blur' }
+                    { required: true, validator: validateNumber, trigger: "blur" }
                 ],
-                remark: { required: false, trigger: 'blur' }
+                remark: { required: false, trigger: "blur" }
             },
             stockData: [],
             confirm: true,
             outData: [],
-            category: '',
-            number: '',
-            name: '',
+            category: "",
+            number: "",
+            name: "",
             branchList: [],
             personsList: [],
-            branchId: '',
+            branchId: "",
             refresh: true,
             tableKey: [
-                { prop: 'name', label: '名称', width: '200' },
-                { prop: 'category', label: '类别', width: '200' },
-                { prop: 'number', label: '数量', width: '200' },
-                { prop: 'unit', label: '最小单位', width: '200' },
-                { label: '操作', width: '220' }
+                { prop: "name", label: "名称", width: "200" },
+                { prop: "category", label: "类别", width: "200" },
+                { prop: "number", label: "数量", width: "200" },
+                { prop: "unit", label: "最小单位", width: "200" },
+                { label: "操作", width: "220" }
             ],
             outTableKey: [
-                { prop: 'receiveTime', label: '领取时间', width: '150' },
-                { prop: 'receiveBranch', label: '领取部门', width: '150' },
-                { prop: 'receiver', label: '领取人', width: '150' },
-                { prop: 'receiveGoodCategory', label: '物品类别', width: '150' },
-                { prop: 'receiveGoodName', label: '物品名称', width: '150' },
-                { prop: 'receiveNumber', label: '物品数量', width: '150' },
-                { prop: 'receiveGoodUnit', label: '物品单位', width: '200' },
-                { prop: 'remark', label: '备注', width: '150' }
+                { prop: "receiveTime", label: "领取时间", width: "150" },
+                { prop: "receiveBranch", label: "领取部门", width: "150" },
+                { prop: "receiver", label: "领取人", width: "150" },
+                { prop: "receiveGoodCategory", label: "物品类别", width: "150" },
+                { prop: "receiveGoodName", label: "物品名称", width: "150" },
+                { prop: "receiveNumber", label: "物品数量", width: "150" },
+                { prop: "receiveGoodUnit", label: "物品单位", width: "200" },
+                { prop: "remark", label: "备注", width: "150" }
             ]
         };
     },
@@ -210,22 +208,22 @@ export default {
             user: state => state.user.user
         })
     },
-    mounted () {
+    mounted() {
         this.getStationery();
         this.getBranchs();
         this.getStationeryRecord();
     },
     methods: {
-        onChange (value, formType) {
+        onChange(value, formType) {
             this.form[formType] = value;
         },
-        onChangeOutInfo (value, formType) {
+        onChangeOutInfo(value, formType) {
             this.outForm[formType] = value;
         },
-        onChangeOut (value, formType) {
+        onChangeOut(value, formType) {
             this.outForm[formType] = value;
             this.$http
-                .post('/api/getPersonsForBranch', { branchId: value })
+                .post("/api/getPersonsForBranch", { branchId: value })
                 .then(res => {
                     let { success, msg, persons } = res;
                     if (success) {
@@ -241,8 +239,8 @@ export default {
                     }
                 });
         },
-        getBranchs () {
-            this.$http.post('/api/getBranchs').then(res => {
+        getBranchs() {
+            this.$http.post("/api/getBranchs").then(res => {
                 let { success, branchs } = res;
                 if (success) {
                     branchs.forEach(item => {
@@ -251,13 +249,13 @@ export default {
                 }
             });
         },
-        closeModel (flag) {
+        closeModel(flag) {
             this.modelVisible = false;
             this.getModelVisible = false;
         },
-        getStationery () {
+        getStationery() {
             this.$http
-                .post('/api/getStationery', {
+                .post("/api/getStationery", {
                     pageNo: 0,
                     pageSize: 20,
                     category: this.category,
@@ -273,9 +271,9 @@ export default {
                     }
                 });
         },
-        getStationeryRecord () {
+        getStationeryRecord() {
             this.$http
-                .post('/api/getStationeryRecord', {
+                .post("/api/getStationeryRecord", {
                     pageNo: 0,
                     pageSize: 20,
                     category: this.category,
@@ -291,18 +289,18 @@ export default {
                     }
                 });
         },
-        doConfirm () {
+        doConfirm() {
             this.$refs.form.validate(valid => {
                 if (valid) {
                     this.$http
-                        .post('/api/addStationery', {
+                        .post("/api/addStationery", {
                             stationery: this.form,
                             userId: this.user._id
                         })
                         .then(res => {
                             let { success, msg } = res;
                             if (success) {
-                                this.$alert('添加成功');
+                                this.$alert("添加成功");
                                 this.$refs.form.resetFields();
                                 this.modelVisible = false;
                                 this.getStationery();
@@ -311,16 +309,16 @@ export default {
                             }
                         });
                 } else {
-                    this.$alert('信息填写有误，请重新填写');
+                    this.$alert("信息填写有误，请重新填写");
                 }
             });
         },
-        doConfirmOut () {
+        doConfirmOut() {
             if (this.outForm.receiveNumber > this.number) {
-                this.$alert('领取的数量不能大于库存数量');
+                this.$alert("领取的数量不能大于库存数量");
             } else {
                 this.$http
-                    .post('/api/addStationeryRecord', {
+                    .post("/api/addStationeryRecord", {
                         stationeryId: this.outForm.stationeryId,
                         receiveNumber: this.outForm.receiveNumber,
                         receiverId: this.outForm.receiverId,
@@ -330,7 +328,7 @@ export default {
                     .then(res => {
                         let { success, msg } = res;
                         if (success) {
-                            this.$alert('领取成功');
+                            this.$alert("领取成功");
                             this.$refs.outForm.resetFields();
                             this.getModelVisible = false;
                             this.getStationery();
@@ -340,36 +338,36 @@ export default {
                     });
             }
         },
-        tabClick () {
+        tabClick() {
             this.getStationery();
-            this.category = '';
-            this.number = '';
+            this.category = "";
+            this.number = "";
             this.getStationeryRecord();
         },
-        resetSearch () {
-            this.name = '';
-            this.category = '';
+        resetSearch() {
+            this.name = "";
+            this.category = "";
         },
-        checkout (data) {
+        checkout(data) {
             this.receive = data;
             this.outForm.stationeryId = data.stationeryId;
             this.number = data.number;
             this.getModelVisible = true;
         },
-        add (data) {
+        add(data) {
             this.modelVisible = true;
         },
-        edit (data) {
+        edit(data) {
             this.modelVisible = true;
             if (data) {
-                data.number = '';
+                data.number = "";
                 this.form = data;
             }
         },
-        doSearch () {
+        doSearch() {
             this.getStationery();
         },
-        doSearchOut () {
+        doSearchOut() {
             this.getStationeryRecord();
         }
     }

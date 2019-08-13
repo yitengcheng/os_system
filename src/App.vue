@@ -12,12 +12,12 @@
         <Header />
       </el-header>
       <el-scrollbar style="height:100%;backgroundColor:#fff">
+        <el-button
+          @click="barFlag"
+          class="showBarBtn"
+          :icon="showBar?'el-icon-d-arrow-left':'el-icon-d-arrow-right'"
+        />
         <el-main class="main">
-          <el-button
-            @click="barFlag"
-            class="showBarBtn"
-            :icon="showBar?'el-icon-d-arrow-left':'el-icon-d-arrow-right'"
-          />
           <router-view></router-view>
         </el-main>
       </el-scrollbar>
@@ -26,36 +26,36 @@
 </template>
 
 <script>
-import SideBar from './components/SideBar';
-import Header from './components/Header';
+import SideBar from "./components/SideBar";
+import Header from "./components/Header";
 export default {
-    name: 'App',
+    name: "App",
     components: { Header, SideBar },
-    created () {
-        this.$router.replace('/');
+    created() {
+        this.$router.replace("/");
         // 在页面加载时读取sessionStorage里的状态信息
-        if (sessionStorage.getItem('store')) {
+        if (sessionStorage.getItem("store")) {
             this.$store.replaceState(
                 Object.assign(
                     {},
                     this.$store.state,
-                    JSON.parse(sessionStorage.getItem('store'))
+                    JSON.parse(sessionStorage.getItem("store"))
                 )
             );
         }
 
         // 在页面刷新时将vuex里的信息保存到sessionStorage里
-        window.addEventListener('beforeunload', () => {
-            sessionStorage.setItem('store', JSON.stringify(this.$store.state));
+        window.addEventListener("beforeunload", () => {
+            sessionStorage.setItem("store", JSON.stringify(this.$store.state));
         });
     },
-    data () {
+    data() {
         return {
             showBar: true
         };
     },
     methods: {
-        barFlag () {
+        barFlag() {
             this.showBar = !this.showBar;
         }
     }
@@ -75,7 +75,7 @@ export default {
   overflow: hidden;
 }
 .el-scrollbar__wrap {
-  overflow-x: hidden;
+  overflow-x: hidden !important;
   margin-bottom: 0px !important;
 }
 .elHeader {
@@ -87,13 +87,13 @@ export default {
   background-color: $color-background;
 }
 .showBarBtn {
-  padding: 0;
-  width: 15px;
-  height: 50px;
-  background-color: gray;
-  color: #fff;
-  position: absolute;
-  top: 50%;
+  padding: 0 !important;
+  width: 15px !important;
+  height: 50px !important;
+  background-color: gray !important;
+  color: #fff !important;
+  position: absolute !important;
+  top: 50% !important;
 }
 .sideBar-enter,
 .sideBar-leave-to {
