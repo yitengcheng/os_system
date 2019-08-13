@@ -49,7 +49,7 @@ axios.interceptors.response.use(
 Vue.prototype.$http = axios;
 Vue.prototype._ = loadsh;
 Vue.prototype.$utils = utils;
-Vue.prototype.$API = 'http://localhost:3000/oa';
+Vue.prototype.$API = 'http://localhost:4000';
 // Vue.prototype.$API = 'http://www.fanzehua.cn/oa';
 Vue.prototype.$moment = moment;
 Vue.filter('currency', currency);

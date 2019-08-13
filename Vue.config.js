@@ -1,6 +1,7 @@
 module.exports = {
     // 基本路径
-    publicPath: '/oa/',
+    publicPath: '/',
+    // publicPath: '/oa/',
     // 输出文件目录
     outputDir: 'dist',
     // eslint-loader 是否在保存的时候检查
@@ -34,10 +35,10 @@ module.exports = {
         hotOnly: false,
         proxy: {//反向代理的方式解决跨域
             '/api': {
-                target: 'http://192.168.0.118:3000'
+                target: 'http://192.168.0.118:4000'
             },
             '/uploads': {
-                target: 'http://192.168.0.118:3000'
+                target: 'http://192.168.0.118:4000'
             }
         }
     },
