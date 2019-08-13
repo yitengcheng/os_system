@@ -29,6 +29,7 @@ Vue.use(infiniteScroll);
 Vue.component('icon', Icon);
 Vue.component('downloadExcel', JsonExcel);
 Vue.component('v-chart', ECharts);
+// axios.defaults.baseURL = 'http://www.fanzehua.cn/oa';
 axios.interceptors.response.use(
     response => {
         console.log('success', { data: response.data, status: response.status });
@@ -48,8 +49,8 @@ axios.interceptors.response.use(
 Vue.prototype.$http = axios;
 Vue.prototype._ = loadsh;
 Vue.prototype.$utils = utils;
-Vue.prototype.$API = 'http://localhost:3000';
-// Vue.prototype.$API = 'http://www.fanzehua.cn';
+Vue.prototype.$API = 'http://localhost:3000/oa';
+// Vue.prototype.$API = 'http://www.fanzehua.cn/oa';
 Vue.prototype.$moment = moment;
 Vue.filter('currency', currency);
 Vue.use(ElementUI, { size: 'small', zIndex: 3000 });
