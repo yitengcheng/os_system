@@ -16,45 +16,45 @@
 <script>
 export default {
     props: [
-        'form',
-        'options',
-        'label',
-        'value',
-        'align',
-        'size',
-        'clearable',
-        'type'
+        "form",
+        "options",
+        "label",
+        "value",
+        "align",
+        "size",
+        "clearable",
+        "type"
     ],
-    data () {
+    data() {
         return {
-            input: '',
+            input: "",
             pickerOptions: {
-                disabledDate (time) {
+                disabledDate(time) {
                     return (
                         time.getTime() < new Date(new Date().toLocaleDateString()).getTime()
                     );
                 },
                 shortcuts: [
                     {
-                        text: '今天',
-                        onClick (picker) {
-                            picker.$emit('pick', new Date());
+                        text: "今天",
+                        onClick(picker) {
+                            picker.$emit("pick", new Date());
                         }
                     },
                     {
-                        text: '昨天',
-                        onClick (picker) {
+                        text: "昨天",
+                        onClick(picker) {
                             const date = new Date();
                             date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
+                            picker.$emit("pick", date);
                         }
                     },
                     {
-                        text: '一周前',
-                        onClick (picker) {
+                        text: "一周前",
+                        onClick(picker) {
                             const date = new Date();
                             date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
+                            picker.$emit("pick", date);
                         }
                     }
                 ]
@@ -63,21 +63,21 @@ export default {
     },
     watch: {
         form: {
-            handler (newValue, oldValue) {
-                this.input = newValue[this.value] || '';
+            handler(newValue, oldValue) {
+                this.input = newValue[this.value] || "";
             },
             deep: true
         }
     },
-    mounted () {
-        this.input = this.form[this.value] || '';
+    mounted() {
+        this.input = this.form ? this.form[this.value] : "";
     },
     methods: {
-        onChange (value) {
+        onChange(value) {
             this.input = value;
             this.$emit(
-                'onChange',
-                this.$moment(value).format('YYYY-MM-DD hh:mm:ss'),
+                "onChange",
+                this.$moment(value).format("YYYY-MM-DD hh:mm:ss"),
                 this.value
             );
         }

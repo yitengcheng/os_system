@@ -21,50 +21,50 @@
 <script>
 export default {
     props: [
-        'form',
-        'label',
-        'value',
-        'placeholder',
-        'showPassword',
-        'showWordLimit',
-        'type',
-        'rows',
-        'maxlength',
-        'append',
-        'resize',
-        'autosize',
-        'disabled'
+        "form",
+        "label",
+        "value",
+        "placeholder",
+        "showPassword",
+        "showWordLimit",
+        "type",
+        "rows",
+        "maxlength",
+        "append",
+        "resize",
+        "autosize",
+        "disabled"
     ],
     watch: {
         input: {
-            handler (newValue, oldValue) {
+            handler(newValue, oldValue) {
                 this.input = newValue;
             }
         },
         form: {
-            handler (newValue, oldValue) {
-                this.input = newValue[this.value] || '';
+            handler(newValue, oldValue) {
+                this.input = newValue[this.value] || "";
             },
             deep: true
         }
     },
-    data () {
+    data() {
         return {
-            input: '',
-            place: ''
+            input: "",
+            place: ""
         };
     },
-    mounted () {
-        this.input = this.form[this.value] || '';
-        this.place = this.placeholder || '请输入' + this.label;
+    mounted() {
+        this.input = this.form ? this.form[this.value] : "";
+        this.place = this.placeholder || "请输入" + this.label;
     },
     methods: {
-        onChange (value) {
+        onChange(value) {
             this.input = value;
-            this.$emit('onChange', value, this.value);
+            this.$emit("onChange", value, this.value);
         },
-        reset () {
-            this.input = '';
+        reset() {
+            this.input = "";
         }
     }
 };
