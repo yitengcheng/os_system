@@ -5,6 +5,7 @@
       class="select"
       v-model="input"
       :placeholder="place"
+      :disabled="disabled"
       @change="onChange"
     >
       <el-option
@@ -19,7 +20,15 @@
 
 <script>
 export default {
-    props: ["form", "label", "value", "options", "placeholder", "multiple"],
+    props: [
+        "form",
+        "label",
+        "value",
+        "options",
+        "placeholder",
+        "multiple",
+        "disabled"
+    ],
     watch: {
         input: {
             handler(newValue, oldValue) {

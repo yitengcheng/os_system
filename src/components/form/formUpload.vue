@@ -5,6 +5,7 @@
       ref="upload"
       action="/api/upload"
       :http-request="upload"
+      :show-file-list="showList === 'hidden' ? false :true"
       :file-list="fileList"
       :on-remove="remove"
       :accept="accept"
@@ -12,8 +13,9 @@
       :limit="limit*1"
       multiple
     >
-      <i v-if="listType !== 'text'" class="el-icon-plus"></i>
-      <el-button v-else size="small" type="primary">点击上传</el-button>
+      <i v-if="listType !== 'text' && !fileList[fileList.length-1]" class="el-icon-plus"></i>
+      <img v-else :src="fileList[fileList.length-1].url" class="avatar" />
+      <el-button v-if="listType === 'text'" size="small" type="primary">点击上传</el-button>
       <div v-if="accept" slot="tip" class="el-upload__tip">只能上传{{accept}}文件</div>
     </el-upload>
   </el-form-item>
@@ -22,10 +24,9 @@
 <script>
 export default {
     name: "upload",
-    props: ["value", "label", "listType", "accept", "form", "limit"],
+    props: ["value", "label", "listType", "accept", "form", "limit", "showList"],
     data() {
         return {
-            dialogVisible: false,
             fileList: []
         };
     },
@@ -62,7 +63,7 @@ export default {
         },
         before(file) {
             let testmsg = file.name.substring(file.name.lastIndexOf("."));
-            let acceptList = this.accept.split(",");
+            let acceptList = this.accept && this.accept.split(",");
             let flag = this._.findIndex(acceptList, o => {
                 return o.trim() === testmsg;
             });
@@ -85,4 +86,9 @@ export default {
 };
 </script>
 <style lang='scss' scoped>
+.avatar {
+  width: 145px;
+  height: 145px;
+  display: block;
+}
 </style>

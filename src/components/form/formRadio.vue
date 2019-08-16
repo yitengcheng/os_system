@@ -1,6 +1,6 @@
 <template>
   <el-form-item :label="label" :prop="value">
-    <el-radio-group v-model="input" @change="onChange">
+    <el-radio-group v-model="input" @change="onChange" :disabled="disabled">
       <el-radio v-for="(check,index) in checks" :key="index" :label="check"></el-radio>
     </el-radio-group>
   </el-form-item>
@@ -8,7 +8,7 @@
 
 <script>
 export default {
-    props: ["form", "label", "value", "checks"],
+    props: ["form", "label", "value", "checks", "disabled"],
     watch: {
         input: {
             handler(newValue, oldValue) {

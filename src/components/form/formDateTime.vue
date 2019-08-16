@@ -9,6 +9,7 @@
       @change="onChange"
       :clearable="clearable || false"
       :picker-options="options || pickerOptions"
+      :disabled="disabled"
     ></el-date-picker>
   </el-form-item>
 </template>
@@ -23,7 +24,8 @@ export default {
         "align",
         "size",
         "clearable",
-        "type"
+        "type",
+        "disabled"
     ],
     data() {
         return {
