@@ -105,6 +105,6 @@ export default {
 }
 .sideBar-enter-active,
 .sideBar-leave-active {
-  transition: all 0.3s;
+  transition: all 0.2s;
 }
 </style>
